@@ -1,0 +1,299 @@
+{
+  "version": "1.0",
+  "screen": {
+    "id": "home_screen",
+    "title": "Home Screen",
+    "layout": {
+      "type": "column",
+      "modifier": {
+        "padding": 16,
+        "fillMaxSize": true
+      },
+      "children": [
+        {
+          "type": "text",
+          "id": "title",
+          "properties": {
+            "text": "Welcome to My App",
+            "style": "headline1",
+            "color": "#FF000000",
+            "textAlign": "center"
+          },
+          "modifier": {
+            "padding": 8,
+            "fillMaxWidth": true
+          }
+        },
+        {
+          "type": "spacer",
+          "properties": {
+            "height": 16
+          }
+        },
+        {
+          "type": "button",
+          "id": "primary_button",
+          "properties": {
+            "text": "Get Started",
+            "enabled": true,
+            "style": "filled"
+          },
+          "modifier": {
+            "fillMaxWidth": true,
+            "padding": 8
+          },
+          "actions": {
+            "onClick": {
+              "type": "navigation",
+              "destination": "details_screen",
+              "params": {
+                "userId": "123"
+              }
+            }
+          }
+        },
+        {
+          "type": "row",
+          "modifier": {
+            "fillMaxWidth": true,
+            "padding": 8
+          },
+          "arrangement": "spaceBetween",
+          "children": [
+            {
+              "type": "text",
+              "properties": {
+                "text": "Status:",
+                "style": "body1"
+              }
+            },
+            {
+              "type": "text",
+              "properties": {
+                "text": "Online",
+                "style": "body1",
+                "color": "#FF4CAF50"
+              }
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "id": "hero_image",
+          "properties": {
+            "url": "https://example.com/image.jpg",
+            "contentDescription": "Hero image",
+            "contentScale": "crop"
+          },
+          "modifier": {
+            "width": 200,
+            "height": 200,
+            "padding": 16
+          }
+        },
+        {
+          "type": "lazy_column",
+          "id": "items_list",
+          "properties": {
+            "dataSource": {
+              "type": "api",
+              "url": "https://api.example.com/items",
+              "method": "GET",
+              "headers": {
+                "Authorization": "Bearer {{token}}"
+              },
+              "pagination": {
+                "type": "offset",
+                "pageSize": 20,
+                "offsetParam": "offset",
+                "limitParam": "limit"
+              }
+            },
+            "itemTemplate": {
+              "type": "card",
+              "layout": {
+                "type": "row",
+                "children": [
+                  {
+                    "type": "image",
+                    "properties": {
+                      "url": "{{item.imageUrl}}",
+                      "contentDescription": "{{item.title}}",
+                      "contentScale": "crop"
+                    },
+                    "modifier": {
+                      "width": 80,
+                      "height": 80
+                    }
+                  },
+                  {
+                    "type": "column",
+                    "modifier": {
+                      "weight": 1,
+                      "padding": 12
+                    },
+                    "children": [
+                      {
+                        "type": "text",
+                        "properties": {
+                          "text": "{{item.title}}",
+                          "style": "subtitle1",
+                          "maxLines": 1
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "properties": {
+                          "text": "{{item.description}}",
+                          "style": "body2",
+                          "maxLines": 2,
+                          "color": "#FF666666"
+                        }
+                      },
+                      {
+                        "type": "text",
+                        "properties": {
+                          "text": "${{item.price}}",
+                          "style": "subtitle2",
+                          "color": "#FF4CAF50"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "onClick": {
+                  "type": "navigation",
+                  "destination": "item_detail",
+                  "params": {
+                    "itemId": "{{item.id}}"
+                  }
+                }
+              }
+            },
+            "loadingTemplate": {
+              "type": "shimmer_card",
+              "count": 5
+            },
+            "emptyTemplate": {
+              "type": "column",
+              "children": [
+                {
+                  "type": "text",
+                  "properties": {
+                    "text": "No items found",
+                    "style": "headline6",
+                    "textAlign": "center"
+                  }
+                }
+              ]
+            },
+            "errorTemplate": {
+              "type": "column",
+              "children": [
+                {
+                  "type": "text",
+                  "properties": {
+                    "text": "Failed to load items",
+                    "style": "body1",
+                    "textAlign": "center"
+                  }
+                },
+                {
+                  "type": "button",
+                  "properties": {
+                    "text": "Retry",
+                    "style": "outlined"
+                  },
+                  "actions": {
+                    "onClick": {
+                      "type": "retry_load"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "modifier": {
+            "fillMaxWidth": true,
+            "weight": 1
+          }
+        },
+        {
+          "type": "lazy_grid",
+          "id": "photo_grid",
+          "properties": {
+            "columns": 2,
+            "dataSource": {
+              "type": "static",
+              "items": [
+                {
+                  "id": "photo1",
+                  "imageUrl": "https://example.com/photo1.jpg",
+                  "title": "Photo 1"
+                },
+                {
+                  "id": "photo2",
+                  "imageUrl": "https://example.com/photo2.jpg",
+                  "title": "Photo 2"
+                }
+              ]
+            },
+            "itemTemplate": {
+              "type": "card",
+              "layout": {
+                "type": "column",
+                "children": [
+                  {
+                    "type": "image",
+                    "properties": {
+                      "url": "{{item.imageUrl}}",
+                      "contentDescription": "{{item.title}}",
+                      "contentScale": "crop"
+                    },
+                    "modifier": {
+                      "fillMaxWidth": true,
+                      "height": 120
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "properties": {
+                      "text": "{{item.title}}",
+                      "style": "caption",
+                      "textAlign": "center"
+                    },
+                    "modifier": {
+                      "padding": 8
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "modifier": {
+            "fillMaxWidth": true,
+            "padding": 8
+          }
+        }
+      ]
+    }
+  },
+  "theme": {
+    "primaryColor": "#FF6200EE",
+    "secondaryColor": "#FF03DAC5",
+    "backgroundColor": "#FFFFFFFF",
+    "textColor": "#FF000000"
+  },
+  "data": {
+    "api_endpoints": {
+      "user_profile": "https://api.example.com/user/profile",
+      "items_list": "https://api.example.com/items"
+    },
+    "static_data": {
+      "app_version": "1.0.0",
+      "environment": "production"
+    }
+  }
+}
