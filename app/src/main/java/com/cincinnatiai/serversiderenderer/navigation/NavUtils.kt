@@ -2,6 +2,7 @@ package com.cincinnatiai.serversiderenderer.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -16,7 +17,7 @@ data class BottomNavItem(
 
 val bottomNavItems = listOf(
     BottomNavItem("home", Icons.Default.Home, R.string.home),
-    BottomNavItem("feed", Icons.Default.Search, R.string.feed),
+    BottomNavItem("charts", Icons.Default.KeyboardArrowRight, R.string.charts),
     BottomNavItem("profile", Icons.Default.Person, R.string.profile),
     BottomNavItem("settings", Icons.Default.Settings, R.string.settings)
 )
@@ -24,7 +25,7 @@ val bottomNavItems = listOf(
 fun getScreenTitle(route: String): Int {
     return when (route) {
         "home" -> R.string.home
-        "feed" -> R.string.feed
+        "charts" -> R.string.charts
         "profile" -> R.string.profile
         "settings" -> R.string.settings
         else -> R.string.app_name

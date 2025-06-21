@@ -2,6 +2,10 @@
 
 - this library is meant to help with the delivery of backend determined JSON into native views
 - The main app module contains a sample of how to use the SSR Library
+- In your terminal:
+  - `export USERNAME=my_github_username`
+  - `export TOKEN=` and put in your classic github token
+  - OR just change the line in the app build.gradle to `implementation(project(":ssr-library"))`
 
 ## Table of Contents
 - [SSR Library](#ssr-library)

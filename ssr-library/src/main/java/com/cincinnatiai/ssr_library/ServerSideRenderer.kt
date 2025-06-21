@@ -417,10 +417,9 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     }
 }
 
-// Utility function to enable/disable verbose logging
 object SSRLogging {
-    var isEnabled = false // Set to true to enable debug logs
-    var isVerboseEnabled = false // Set to true for even more detailed logs
+    var isEnabled = false
+    var isVerboseEnabled = false
 
     fun enable() {
         isEnabled = true

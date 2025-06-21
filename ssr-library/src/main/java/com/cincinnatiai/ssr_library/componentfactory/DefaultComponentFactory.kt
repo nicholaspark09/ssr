@@ -8,8 +8,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,6 +35,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cincinnatiai.ssr_library.ComponentFactory
+import com.cincinnatiai.ssr_library.component.charts.BarChart
+import com.cincinnatiai.ssr_library.component.charts.BubbleChart
+import com.cincinnatiai.ssr_library.component.charts.ChartConfig
+import com.cincinnatiai.ssr_library.component.charts.ChartDataPoint
+import com.cincinnatiai.ssr_library.component.charts.ChartSeries
+import com.cincinnatiai.ssr_library.component.charts.LineChart
+import com.cincinnatiai.ssr_library.component.charts.PieChart
+import com.cincinnatiai.ssr_library.component.charts.RadarChart
 import com.cincinnatiai.ssr_library.model.ActionConfig
 import com.cincinnatiai.ssr_library.model.ActionHandler
 import com.cincinnatiai.ssr_library.model.CoilImageLoader
@@ -135,6 +145,7 @@ class DefaultComponentFactory(
     override fun createComponent(node: ComponentNode): @Composable () -> Unit =
         when (node.type) {
             "column" -> { { CreateColumn(node) } }
+            "scrollable_column" -> { { CreateScrollableColumn(node) } }
             "row" -> { { CreateRow(node) } }
             "text" -> { { CreateText(node) } }
             "button" -> { { CreateButton(node) } }
@@ -145,6 +156,11 @@ class DefaultComponentFactory(
             "card" -> { { CreateCard(node) } }
             "top_app_bar" -> { { CreateTopAppBar(node) } }
             "progress_indicator" -> {{ ShowLoadingState(node) }}
+            "bar_chart" -> { { CreateBarChart(node) } }
+            "line_chart" -> { { CreateLineChart(node) } }
+            "pie_chart" -> { { CreatePieChart(node) } }
+            "bubble_chart" -> { { CreateBubbleChart(node) } }
+            "radar_chart" -> { { CreateRadarChart(node) } }
             else -> { {
                 Text(
                     "Unknown component type: ${node.type}",
@@ -157,12 +173,10 @@ class DefaultComponentFactory(
         val errors = mutableListOf<String>()
         val warnings = mutableListOf<String>()
 
-        // Basic validation
         if (node.type.isBlank()) {
             errors.add("Component type cannot be blank")
         }
 
-        // Type-specific validation
         when (node.type) {
             "text" -> {
                 if (node.properties?.get("text") == null) {
@@ -195,6 +209,17 @@ class DefaultComponentFactory(
                     warnings.add("TopAppBar missing 'title' property")
                 }
             }
+            "bar_chart", "pie_chart", "bubble_chart", "radar_chart" -> {
+                if (node.properties?.get("data") == null) {
+                    errors.add("${node.type} requires 'data' property")
+                }
+            }
+
+            "line_chart" -> {
+                if (node.properties?.get("series") == null) {
+                    errors.add("Line chart requires 'series' property")
+                }
+            }
         }
 
         // Validate children recursively
@@ -219,18 +244,9 @@ class DefaultComponentFactory(
         metadata: ComponentRenderMetadata
     ): @Composable () -> Unit {
         return when (metadata.estimatedComplexity) {
-            ComponentComplexity.HIGH -> {
-                // For high complexity components, do more preparation
-                prepareComplexComponent(node)
-            }
-            ComponentComplexity.MEDIUM -> {
-                // Medium complexity - some optimization
-                prepareMediumComponent(node)
-            }
-            ComponentComplexity.LOW -> {
-                // Low complexity - standard preparation
-                createComponent(node)
-            }
+            ComponentComplexity.HIGH -> prepareComplexComponent(node)
+            ComponentComplexity.MEDIUM -> prepareMediumComponent(node)
+            ComponentComplexity.LOW -> createComponent(node)
         }
     }
 
@@ -377,6 +393,7 @@ class DefaultComponentFactory(
         }
     }
 
+    // This is a mock
     private suspend fun loadApiData(
         dataSource: DataSource,
         page: Int,
@@ -384,7 +401,6 @@ class DefaultComponentFactory(
     ) {
         try {
             withContext(Dispatchers.IO) {
-                // Simulate network delay
                 delay(1000)
 
                 // Mock API response
@@ -421,12 +437,10 @@ class DefaultComponentFactory(
 
         Log.d("SSR_APP_BAR", "Creating TopAppBar: title='$title', center=$centerTitle")
 
-        // Parse colors
         val bgColor = backgroundColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.surface
         val textColor = titleColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
 
         if (centerTitle) {
-            // Centered title version
             CenterAlignedTopAppBar(
                 title = {
                     Text(
@@ -443,7 +457,6 @@ class DefaultComponentFactory(
                 modifier = createModifier(node.modifier)
             )
         } else {
-            // Regular left-aligned version
             TopAppBar(
                 title = {
                     Text(
@@ -480,7 +493,6 @@ class DefaultComponentFactory(
                 else -> Color.Black
             }
         } catch (e: NumberFormatException) {
-            // Named colors support
             when (colorString.lowercase().trim()) {
                 "white" -> Color.White
                 "black" -> Color.Black
@@ -576,11 +588,9 @@ class DefaultComponentFactory(
     ) {
         when (val result = compiledTemplate.preparedComponent) {
             is ComponentPreparationResult.Success -> {
-                // Bind data to the template
                 val boundTemplate = bindDataToTemplate(compiledTemplate.originalTemplate.layout, item)
                 val itemComponent = createComponent(boundTemplate)
 
-                // Handle click actions
                 val clickHandler = compiledTemplate.originalTemplate.actions?.get("onClick")?.let { action ->
                     val boundAction = bindDataToAction(action, item)
                     return@let { actionHandler.handleAction(boundAction) }
@@ -926,6 +936,45 @@ class DefaultComponentFactory(
             }
         }
     }
+
+    @Composable
+    private fun CreateScrollableColumn(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+        val backgroundColor = props["backgroundColor"] as? String
+        val scrollState = rememberScrollState()
+
+        val bgColor = backgroundColor?.let { parseColor(it) }
+
+        var modifier = createModifier(node.modifier)
+            .verticalScroll(scrollState)
+
+        if (bgColor != null) {
+            modifier = modifier.background(bgColor)
+        }
+
+        Column(
+            modifier = modifier
+        ) {
+            node.children?.forEach { child ->
+                val childWeight = child.modifier?.weight
+                if (childWeight != null) {
+                    Box(
+                        modifier = Modifier.weight(childWeight)
+                    ) {
+                        // Create child component with its own modifier (excluding weight)
+                        val childModifierWithoutWeight = child.modifier.copy(weight = null)
+                        val childWithoutWeight = child.copy(modifier = childModifierWithoutWeight)
+                        val childComponent = createComponent(childWithoutWeight)
+                        childComponent()
+                    }
+                } else {
+                    val childComponent = createComponent(child)
+                    childComponent()
+                }
+            }
+        }
+    }
+
     @Composable
     private fun CreateRow(node: ComponentNode) {
         Row(
@@ -935,18 +984,15 @@ class DefaultComponentFactory(
                 val childWeight = child.modifier?.weight
 
                 if (childWeight != null) {
-                    // Child has weight - apply it in RowScope
                     Box(
                         modifier = Modifier.weight(childWeight)
                     ) {
-                        // Create child component with its own modifier (excluding weight)
                         val childModifierWithoutWeight = child.modifier?.copy(weight = null)
                         val childWithoutWeight = child.copy(modifier = childModifierWithoutWeight)
                         val childComponent = createComponent(childWithoutWeight)
                         childComponent()
                     }
                 } else {
-                    // No weight - render normally
                     val childComponent = createComponent(child)
                     childComponent()
                 }
@@ -1160,6 +1206,159 @@ class DefaultComponentFactory(
                 childComponent()
             }
         }
+    }
+
+    @Composable
+    private fun CreateBarChart(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+
+        // Parse chart data
+        val chartData = parseChartData(props["data"])
+        val config = parseChartConfig(props)
+
+        Log.d("SSR_CHART", "Creating BarChart with ${chartData.size} data points")
+
+        BarChart(
+            data = chartData,
+            config = config,
+            modifier = createModifier(node.modifier)
+        )
+    }
+
+    @Composable
+    private fun CreateLineChart(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+
+        // Parse series data
+        val series = parseSeriesData(props["series"])
+        val config = parseChartConfig(props)
+
+        Log.d("SSR_CHART", "Creating LineChart with ${series.size} series")
+
+        LineChart(
+            series = series,
+            config = config,
+            modifier = createModifier(node.modifier)
+        )
+    }
+
+    @Composable
+    private fun CreatePieChart(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+
+        val chartData = parseChartData(props["data"])
+        val config = parseChartConfig(props)
+
+        Log.d("SSR_CHART", "Creating PieChart with ${chartData.size} data points")
+
+        PieChart(
+            data = chartData,
+            config = config,
+            modifier = createModifier(node.modifier)
+        )
+    }
+
+    @Composable
+    private fun CreateBubbleChart(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+
+        val chartData = parseChartData(props["data"])
+        val config = parseChartConfig(props)
+
+        Log.d("SSR_CHART", "Creating BubbleChart with ${chartData.size} data points")
+
+        BubbleChart(
+            data = chartData,
+            config = config,
+            modifier = createModifier(node.modifier)
+        )
+    }
+
+    @Composable
+    private fun CreateRadarChart(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+
+        val chartData = parseChartData(props["data"])
+        val config = parseChartConfig(props)
+
+        Log.d("SSR_CHART", "Creating RadarChart with ${chartData.size} data points")
+
+        RadarChart(
+            data = chartData,
+            config = config,
+            modifier = createModifier(node.modifier)
+        )
+    }
+
+    private fun parseChartData(dataProperty: Any?): List<ChartDataPoint> {
+        return when (dataProperty) {
+            is List<*> -> {
+                dataProperty.mapNotNull { item ->
+                    when (item) {
+                        is Map<*, *> -> {
+                            val label = item["label"] as? String ?: ""
+                            val color = item["color"] as? String
+                            val metadata = item["metadata"] as? Map<String, Any>
+                            val value = when (val v = item["value"]) {
+                                is Number -> v.toDouble()
+                                is String -> v.toDoubleOrNull() ?: 0.0
+                                else -> null
+                            }
+                            if (value == null) {
+                                return@mapNotNull null
+                            }
+                            ChartDataPoint(
+                                label = label,
+                                value = value,
+                                color = color,
+                                metadata = metadata
+                            )
+                        }
+                        else -> null
+                    }
+                }
+            }
+            else -> emptyList()
+        }
+    }
+
+    private fun parseSeriesData(seriesProperty: Any?): List<ChartSeries> {
+        return when (seriesProperty) {
+            is List<*> -> {
+                seriesProperty.mapNotNull { item ->
+                    when (item) {
+                        is Map<*, *> -> {
+                            val name = item["name"] as? String ?: ""
+                            val color = item["color"] as? String
+                            val data = parseChartData(item["data"])
+
+                            ChartSeries(
+                                name = name,
+                                data = data,
+                                color = color
+                            )
+                        }
+                        else -> null
+                    }
+                }
+            }
+            else -> emptyList()
+        }
+    }
+
+    private fun parseChartConfig(props: Map<String, Any>): ChartConfig {
+        return ChartConfig(
+            title = props["title"] as? String,
+            subtitle = props["subtitle"] as? String,
+            showLegend = props["showLegend"] as? Boolean ?: true,
+            showGrid = props["showGrid"] as? Boolean ?: true,
+            showLabels = props["showLabels"] as? Boolean ?: true,
+            showValues = props["showValues"] as? Boolean ?: false,
+            animated = props["animated"] as? Boolean ?: true,
+            colors = (props["colors"] as? List<*>)?.filterIsInstance<String>(),
+            height = (props["height"] as? Number)?.toInt(),
+            width = (props["width"] as? Number)?.toInt()
+        )
     }
 
     private fun createModifier(modifierConfig: ModifierConfig?): Modifier {

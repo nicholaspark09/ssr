@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.gson.core)
     implementation(libs.coil.compose)
-    implementation(project(":ssr-library"))
+    implementation("com.cincinnatiai:ssr-library:0.0.12")
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)

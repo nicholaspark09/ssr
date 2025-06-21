@@ -27,6 +27,7 @@ import com.cincinnatiai.serversiderenderer.R
 import com.cincinnatiai.serversiderenderer.actionhandler.CustomAppActionHandler
 import com.cincinnatiai.serversiderenderer.navigation.bottomNavItems
 import com.cincinnatiai.serversiderenderer.navigation.getScreenTitle
+import com.cincinnatiai.serversiderenderer.ui.charts.ChartsScreen
 import com.cincinnatiai.serversiderenderer.ui.home.HomeScreen
 import com.cincinnatiai.serversiderenderer.ui.loading.LoadingScreen
 import com.cincinnatiai.serversiderenderer.ui.profile.ProfileScreen
@@ -82,7 +83,7 @@ fun MainScreen() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("home") { HomeScreen() }
-            composable("feed") { LoadingScreen() }
+            composable("charts") { ChartsScreen() }
             composable("profile") { ProfileScreen() }
             composable("settings") { LoadingScreen() }
         }
