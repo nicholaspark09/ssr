@@ -108,16 +108,20 @@ fun BarChart(
 fun LineChart(
     series: List<ChartSeries>,
     config: ChartConfig = ChartConfig(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    props: Map<String, Any>
 ) {
+    val elevation = (props["elevation"] as? Number)?.toFloat() ?: 2f
+    val backgroundColor = props["backgroundColor"] as? String
+    val bgColor = backgroundColor?.let { parseColor(it) } ?: Color.White
     val defaultColors = listOf(
         "#3B82F6", "#EF4444", "#10B981", "#F59E0B",
         "#8B5CF6", "#EC4899", "#06B6D4", "#84CC16"
     )
-
     Card(
         modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation.dp),
+        colors = CardDefaults.cardColors(containerColor = bgColor)
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -770,5 +774,40 @@ private fun parseHexColor(hex: String): Color {
         }
     } catch (e: Exception) {
         Color.Blue
+    }
+}
+
+fun parseColor(colorString: String): Color {
+    return try {
+        val cleanColor = colorString.removePrefix("#")
+        val colorLong = cleanColor.toLong(16)
+
+        when (cleanColor.length) {
+            6 -> Color(0xFF000000 or colorLong) // Add full alpha
+            8 -> Color(colorLong) // Already includes alpha
+            3 -> {
+                // Handle short hex format like #RGB -> #RRGGBB
+                val r = cleanColor[0]
+                val g = cleanColor[1]
+                val b = cleanColor[2]
+                val expandedColor = "$r$r$g$g$b$b"
+                Color(0xFF000000 or expandedColor.toLong(16))
+            }
+            else -> Color.Black
+        }
+    } catch (e: NumberFormatException) {
+        when (colorString.lowercase().trim()) {
+            "white" -> Color.White
+            "black" -> Color.Black
+            "red" -> Color.Red
+            "green" -> Color.Green
+            "blue" -> Color.Blue
+            "gray", "grey" -> Color.Gray
+            "yellow" -> Color.Yellow
+            "cyan" -> Color.Cyan
+            "magenta" -> Color.Magenta
+            "transparent" -> Color.Transparent
+            else -> Color.Black // Default fallback
+        }
     }
 }

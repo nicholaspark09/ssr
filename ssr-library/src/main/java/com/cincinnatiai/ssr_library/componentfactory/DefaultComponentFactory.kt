@@ -43,6 +43,7 @@ import com.cincinnatiai.ssr_library.component.charts.ChartSeries
 import com.cincinnatiai.ssr_library.component.charts.LineChart
 import com.cincinnatiai.ssr_library.component.charts.PieChart
 import com.cincinnatiai.ssr_library.component.charts.RadarChart
+import com.cincinnatiai.ssr_library.component.charts.parseColor
 import com.cincinnatiai.ssr_library.model.ActionConfig
 import com.cincinnatiai.ssr_library.model.ActionHandler
 import com.cincinnatiai.ssr_library.model.CoilImageLoader
@@ -56,6 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.text.get
 
 enum class ComponentComplexity {
     LOW, MEDIUM, HIGH
@@ -152,6 +154,7 @@ class DefaultComponentFactory(
             "image" -> { { CreateImage(node) } }
             "spacer" -> { { CreateSpacer(node) } }
             "lazy_column" -> { { CreateLazyColumn(node) } }
+            "enhanced_lazy_column" -> { { CreateEnhancedLazyColumn(node) }}
             "lazy_row" -> { { CreateLazyRow(node) } }
             "card" -> { { CreateCard(node) } }
             "top_app_bar" -> { { CreateTopAppBar(node) } }
@@ -471,41 +474,6 @@ class DefaultComponentFactory(
                 ),
                 modifier = createModifier(node.modifier)
             )
-        }
-    }
-
-    private fun parseColor(colorString: String): Color {
-        return try {
-            val cleanColor = colorString.removePrefix("#")
-            val colorLong = cleanColor.toLong(16)
-
-            when (cleanColor.length) {
-                6 -> Color(0xFF000000 or colorLong) // Add full alpha
-                8 -> Color(colorLong) // Already includes alpha
-                3 -> {
-                    // Handle short hex format like #RGB -> #RRGGBB
-                    val r = cleanColor[0]
-                    val g = cleanColor[1]
-                    val b = cleanColor[2]
-                    val expandedColor = "$r$r$g$g$b$b"
-                    Color(0xFF000000 or expandedColor.toLong(16))
-                }
-                else -> Color.Black
-            }
-        } catch (e: NumberFormatException) {
-            when (colorString.lowercase().trim()) {
-                "white" -> Color.White
-                "black" -> Color.Black
-                "red" -> Color.Red
-                "green" -> Color.Green
-                "blue" -> Color.Blue
-                "gray", "grey" -> Color.Gray
-                "yellow" -> Color.Yellow
-                "cyan" -> Color.Cyan
-                "magenta" -> Color.Magenta
-                "transparent" -> Color.Transparent
-                else -> Color.Black // Default fallback
-            }
         }
     }
 
@@ -1051,17 +1019,13 @@ class DefaultComponentFactory(
 
         var modifier = createModifier(node.modifier)
 
-        // Apply size if specified - for circles, make it square
         if (size != null) {
             modifier = modifier.size(size.dp)
         }
-
-        // Center the image
         if (alignment == "center") {
             modifier = modifier.wrapContentSize(Alignment.Center)
         }
 
-        // Use custom image loader if available
         imageLoader.LoadImage(
             url = url,
             modifier = if (shape == "circle") {
@@ -1125,11 +1089,9 @@ class DefaultComponentFactory(
                                 val wrappedData = mapOf("item" to item)
                                 Log.d("SSR_ITEM", "Wrapped data: $wrappedData")
 
-                                // Bind data to the template
                                 val boundTemplate = bindDataToTemplate(itemTemplate.layout, wrappedData)
                                 val itemComponent = createComponent(boundTemplate)
 
-                                // Handle click actions
                                 val clickHandler = itemTemplate.actions?.get("onClick")?.let { action ->
                                     val boundAction = bindDataToAction(action, wrappedData)
                                     return@let {
@@ -1160,6 +1122,209 @@ class DefaultComponentFactory(
             }
         } else {
             Text("LazyColumn requires dataSource and itemTemplate")
+        }
+    }
+
+    @Composable
+    private fun CreateEnhancedLazyColumn(node: ComponentNode) {
+        val dataSource = node.dataSource
+        val itemTemplate = node.itemTemplate
+
+        if (dataSource != null && itemTemplate != null) {
+            when (dataSource.type) {
+                "static" -> {
+                    val items = dataSource.items ?: emptyList()
+                    Log.d("SSR_ENHANCED_LAZY", "Creating enhanced LazyColumn with ${items.size} items")
+
+                    if (items.isEmpty()) {
+                        Box(
+                            modifier = createModifier(node.modifier),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("No items to display")
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = createModifier(node.modifier),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(items.size) { index ->
+                                val item = items[index]
+
+                                val templateToUse = when {
+                                    item is Map<*, *> && item.containsKey("template") -> {
+                                        // Parse custom template for this item
+                                        parseComponentNode(item["template"])
+                                    }
+                                    item is Map<*, *> && item.containsKey("component_type") -> {
+                                        // Create template based on component type
+                                        createTemplateForType(item["component_type"] as? String ?: "default", item)
+                                    }
+                                    else -> itemTemplate.layout
+                                }
+
+                                val wrappedData = when (item) {
+                                    is Map<*, *> -> item as Map<String, Any>
+                                    else -> mapOf("item" to item)
+                                }
+
+                                val boundTemplate = bindDataToTemplate(templateToUse, wrappedData)
+                                val itemComponent = createComponent(boundTemplate)
+
+                                val clickHandler = itemTemplate.actions?.get("onClick")?.let { action ->
+                                    val boundAction = bindDataToAction(action, wrappedData)
+                                    return@let {
+                                        Log.d("SSR_ENHANCED_ACTION", "Item clicked: ${boundAction.destination}")
+                                        actionHandler.handleAction(boundAction)
+                                    }
+                                }
+
+                                if (clickHandler != null) {
+                                    Box(
+                                        modifier = Modifier.clickable { clickHandler() }
+                                    ) {
+                                        itemComponent()
+                                    }
+                                } else {
+                                    itemComponent()
+                                }
+                            }
+                        }
+                    }
+                }
+                "api" -> {
+                    Text("API LazyColumn not implemented in enhanced version")
+                }
+                else -> {
+                    Text("Unsupported data source type: ${dataSource.type}")
+                }
+            }
+        } else {
+            Text("Enhanced LazyColumn requires dataSource and itemTemplate")
+        }
+    }
+
+    private fun createTemplateForType(type: String, itemData: Map<String, Any>): ComponentNode {
+        return when (type) {
+            "chart_bar" -> ComponentNode(
+                type = "card",
+                children = listOf(
+                    ComponentNode(
+                        type = "bar_chart",
+                        properties = mapOf(
+                            "title" to (itemData["title"] ?: "Chart"),
+                            "subtitle" to (itemData["subtitle"] ?: ""),
+                            "showLegend" to true,
+                            "showGrid" to true,
+                            "showValues" to true,
+                            "height" to 350,
+                            "data" to (itemData["data"] ?: emptyList<Any>())
+                        )
+                    )
+                ),
+                modifier = ModifierConfig(fillMaxWidth = true, padding = 8)
+            )
+
+            "chart_line" -> ComponentNode(
+                type = "card",
+                children = listOf(
+                    ComponentNode(
+                        type = "line_chart",
+                        properties = mapOf(
+                            "title" to (itemData["title"] ?: "Chart"),
+                            "subtitle" to (itemData["subtitle"] ?: ""),
+                            "showLegend" to true,
+                            "showGrid" to true,
+                            "height" to 350,
+                            "series" to (itemData["series"] ?: emptyList<Any>())
+                        )
+                    )
+                ),
+                modifier = ModifierConfig(fillMaxWidth = true, padding = 8)
+            )
+
+            "chart_pie" -> ComponentNode(
+                type = "card",
+                children = listOf(
+                    ComponentNode(
+                        type = "pie_chart",
+                        properties = mapOf(
+                            "title" to (itemData["title"] ?: "Chart"),
+                            "subtitle" to (itemData["subtitle"] ?: ""),
+                            "showLegend" to true,
+                            "showValues" to true,
+                            "height" to 350,
+                            "data" to (itemData["data"] ?: emptyList<Any>())
+                        )
+                    )
+                ),
+                modifier = ModifierConfig(fillMaxWidth = true, padding = 8)
+            )
+
+            "chart_radar" -> ComponentNode(
+                type = "card",
+                children = listOf(
+                    ComponentNode(
+                        type = "radar_chart",
+                        properties = mapOf(
+                            "title" to (itemData["title"] ?: "Chart"),
+                            "subtitle" to (itemData["subtitle"] ?: ""),
+                            "showLabels" to true,
+                            "height" to 350,
+                            "data" to (itemData["data"] ?: emptyList<Any>())
+                        )
+                    )
+                ),
+                modifier = ModifierConfig(fillMaxWidth = true, padding = 8)
+            )
+
+            "spacer" -> ComponentNode(
+                type = "spacer",
+                properties = mapOf(
+                    "height" to (itemData["height"] ?: 16)
+                )
+            )
+
+            else -> ComponentNode(
+                type = "text",
+                properties = mapOf("text" to "Unknown item type: $type")
+            )
+        }
+    }
+
+    private fun parseComponentNode(template: Any?): ComponentNode {
+        return when (template) {
+            is Map<*, *> -> {
+                val map = template as Map<String, Any>
+                ComponentNode(
+                    type = map["type"] as? String ?: "text",
+                    id = map["id"] as? String,
+                    properties = map["properties"] as? Map<String, Any>,
+                    modifier = parseModifierConfig(map["modifier"]),
+                    children = (map["children"] as? List<*>)?.mapNotNull {
+                        parseComponentNode(it)
+                    },
+                    actions = map["actions"] as? Map<String, ActionConfig>
+                )
+            }
+            else -> ComponentNode(type = "text", properties = mapOf("text" to "Invalid template"))
+        }
+    }
+
+    private fun parseModifierConfig(modifier: Any?): ModifierConfig? {
+        return when (modifier) {
+            is Map<*, *> -> {
+                val map = modifier as Map<String, Any>
+                ModifierConfig(
+                    padding = map["padding"] as? Int,
+                    fillMaxSize = map["fillMaxSize"] as? Boolean,
+                    fillMaxWidth = map["fillMaxWidth"] as? Boolean,
+                    width = map["width"] as? Int,
+                    height = map["height"] as? Int,
+                    weight = (map["weight"] as? Number)?.toFloat()
+                )
+            }
+            else -> null
         }
     }
 
@@ -1228,8 +1393,6 @@ class DefaultComponentFactory(
     @Composable
     private fun CreateLineChart(node: ComponentNode) {
         val props = node.properties ?: emptyMap()
-
-        // Parse series data
         val series = parseSeriesData(props["series"])
         val config = parseChartConfig(props)
 
@@ -1238,7 +1401,8 @@ class DefaultComponentFactory(
         LineChart(
             series = series,
             config = config,
-            modifier = createModifier(node.modifier)
+            modifier = createModifier(node.modifier),
+            props
         )
     }
 

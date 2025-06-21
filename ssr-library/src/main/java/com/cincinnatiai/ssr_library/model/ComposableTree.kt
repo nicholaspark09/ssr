@@ -111,6 +111,13 @@ data class LoadingState(
     val count: Int? = null
 )
 
+data class LazyColumnItem(
+    val id: String,
+    val type: String,
+    val template: ComponentNode,
+    val data: Map<String, Any> = emptyMap()
+)
+
 data class ComponentNode(
     val type: String,
     val id: String? = null,
@@ -158,7 +165,7 @@ data class CompiledModifier(
 }
 
 enum class ComponentType {
-    COLUMN, SCROLLABLE_COLUMN, ROW, TEXT, BUTTON, IMAGE, LAZY_COLUMN, LAZY_ROW, LAZY_GRID, CARD, SPACER,
+    COLUMN, SCROLLABLE_COLUMN, ROW, TEXT, BUTTON, IMAGE, LAZY_COLUMN, ENHANCED_LAZY_COLUMN, LAZY_ROW, LAZY_GRID, CARD, SPACER,
     TOP_APP_BAR, PROGRESS_INDICATOR,
     BAR_CHART, LINE_CHART, PIE_CHART, BUBBLE_CHART, RADAR_CHART,
     UNKNOWN;
@@ -167,6 +174,7 @@ enum class ComponentType {
         fun fromString(type: String): ComponentType = when (type) {
             "column" -> COLUMN
             "scrollable_column" -> SCROLLABLE_COLUMN
+            "enhanced_lazy_column" -> ENHANCED_LAZY_COLUMN
             "row" -> ROW
             "text" -> TEXT
             "button" -> BUTTON
