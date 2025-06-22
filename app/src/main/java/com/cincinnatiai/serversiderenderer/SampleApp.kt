@@ -14,7 +14,7 @@ class SampleApp : Application() {
         Timber.plant(Timber.DebugTree())
 
         // Initialize Library at app onCreate to prevent crashes
-        ServerSideRenderingLibrary.initialize(CustomAppActionHandler)
+        ServerSideRenderingLibrary.initializeWithAnalytics(actionHandler = CustomAppActionHandler)
         SSRLogging.enable()
     }
 }

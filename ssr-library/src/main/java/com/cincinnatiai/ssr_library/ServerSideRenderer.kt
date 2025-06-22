@@ -57,8 +57,8 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     init {
         if (SSRLogging.isEnabled) {
             Timber.d("🚀 ServerSideRendererImpl initialized")
-            Timber.d("📦 ComponentFactory: ${componentFactory::class.simpleName}")
-            Timber.d("🖼️ ImageLoader: ${imageLoader::class.simpleName}")
+            Timber.d("ComponentFactory: ${componentFactory::class.simpleName}")
+            Timber.d("ImageLoader: ${imageLoader::class.simpleName}")
         }
     }
 
@@ -69,21 +69,21 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
         errorContent: @Composable (String, () -> Unit) -> Unit
     ) {
         if (SSRLogging.isEnabled) {
-            Timber.d("🎬 RenderScreen called with JSON length: ${json.length}")
+            Timber.d("RenderScreen called with JSON length: ${json.length}")
         }
 
         var renderState by remember { mutableStateOf<ComponentRenderState>(ComponentRenderState.Loading) }
         val cacheKey = remember(json) {
             val key = json.hashCode().toString()
             if (SSRLogging.isEnabled) {
-                Timber.d("🔑 Generated cache key: $key")
+                Timber.d("Generated cache key: $key")
             }
             key
         }
 
         LaunchedEffect(json) {
             if (SSRLogging.isEnabled) {
-                Timber.d("⚡ LaunchedEffect started for cache key: $cacheKey")
+                Timber.d("LaunchedEffect started for cache key: $cacheKey")
             }
             renderState = ComponentRenderState.Loading
 
@@ -91,13 +91,13 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                 val cached = componentCache[cacheKey]
                 if (cached != null) {
                     if (SSRLogging.isEnabled) {
-                        Timber.d("✅ Cache HIT for key: $cacheKey")
+                        Timber.d("Cache HIT for key: $cacheKey")
                     }
                     renderState = ComponentRenderState.Success(cached)
                 } else {
                     if (SSRLogging.isEnabled) {
-                        Timber.d("❌ Cache MISS for key: $cacheKey")
-                        Timber.d("🏗️ Building component tree...")
+                        Timber.d("Cache MISS for key: $cacheKey")
+                        Timber.d("Building component tree...")
                     }
 
                     val startTime = System.currentTimeMillis()
@@ -107,20 +107,20 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                     val buildTime = System.currentTimeMillis() - startTime
 
                     if (SSRLogging.isEnabled) {
-                        Timber.d("✅ Component tree built in ${buildTime}ms")
+                        Timber.d("Component tree built in ${buildTime}ms")
                     }
                     componentCache[cacheKey] = composableTree
                     if (SSRLogging.isEnabled) {
-                        Timber.d("💾 Component tree cached. Cache size: ${componentCache.size}")
+                        Timber.d("Component tree cached. Cache size: ${componentCache.size}")
                     }
 
                     renderState = ComponentRenderState.Success(composableTree)
                 }
             } catch (e: Throwable) {
 
-                Timber.e(e, "💥 ERROR in RenderScreen")
+                Timber.e(e, "ERROR in RenderScreen")
                 if (SSRLogging.isEnabled) {
-                    Timber.e("📄 JSON that caused error: $json")
+                    Timber.e("JSON that caused error: $json")
                 }
                 renderState = ComponentRenderState.Error(
                     message = "Failed to Render ComponentRenderState: ${e.message}",
@@ -132,10 +132,10 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
         when (val state = renderState) {
             is ComponentRenderState.Error -> {
 
-                Timber.e("🔴 Rendering error state: ${state.message}")
+                Timber.e("Rendering error state: ${state.message}")
                 errorContent(state.message) {
                     if (SSRLogging.isEnabled) {
-                        Timber.d("🔄 Retry triggered")
+                        Timber.d("Retry triggered")
                     }
                     renderState = ComponentRenderState.Loading
                 }
@@ -143,15 +143,16 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
 
             ComponentRenderState.Loading -> {
                 if (SSRLogging.isEnabled) {
-                    Timber.d("⏳ Rendering loading state")
+                    Timber.d("Rendering loading state")
                 }
                 loadingContent()
             }
 
             is ComponentRenderState.Success -> {
                 if (SSRLogging.isEnabled) {
-                    Timber.d("🟢 Rendering success state")
+                    Timber.d("Rendering success state")
                 }
+
                 state.composableTree.rootComponent()
             }
         }
@@ -160,65 +161,65 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     private suspend fun buildComponentTree(json: String): ComposableTree =
         withContext(parsingDispatcher) {
             if (SSRLogging.isEnabled) {
-                Timber.d("🏗️ Building component tree...")
+                Timber.d("Building component tree...")
             }
 
             try {
                 if (SSRLogging.isEnabled) {
-                    Timber.d("📖 Step 1: Parsing JSON...")
+                    Timber.d("Step 1: Parsing JSON...")
                 }
                 val componentScreen = parseComponentJson(json)
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ JSON parsed successfully")
-                    Timber.d("📋 Screen ID: ${componentScreen.screen.id}")
-                    Timber.d("📋 Screen Title: ${componentScreen.screen.title}")
-                    Timber.d("📋 Root component type: ${componentScreen.screen.layout.type}")
+                    Timber.d("JSON parsed successfully")
+                    Timber.d("Screen ID: ${componentScreen.screen.id}")
+                    Timber.d("Screen Title: ${componentScreen.screen.title}")
+                    Timber.d("Root component type: ${componentScreen.screen.layout.type}")
                 }
 
                 if (SSRLogging.isEnabled) {
-                    Timber.d("🔍 Step 2: Analyzing component tree...")
+                    Timber.d("Step 2: Analyzing component tree...")
                 }
                 val metadata = analyzeComponentTree(componentScreen.screen.layout)
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ Analysis complete - Components: ${metadata.componentCount}, Max depth: ${metadata.maxDepth}")
+                    Timber.d("Analysis complete - Components: ${metadata.componentCount}, Max depth: ${metadata.maxDepth}")
                 }
 
                 if (SSRLogging.isEnabled) {
-                    Timber.d("⚙️ Step 3: Precompiling components...")
+                    Timber.d("Step 3: Precompiling components...")
                 }
                 val precompiledComponents =
                     precompileComponentsWithFactory(componentScreen.screen.layout)
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ Components precompiled successfully")
+                    Timber.d("Components precompiled successfully")
                 }
 
                 if (SSRLogging.isEnabled) {
-                    Timber.d("🌳 Step 4: Building root component...")
+                    Timber.d("Step 4: Building root component...")
                 }
                 val rootComponent: @Composable () -> Unit = {
                     if (SSRLogging.isEnabled) {
-                        Timber.d("🎨 Rendering root component...")
+                        Timber.d("Rendering root component...")
                     }
                     // TODO implement and apply custom themes
                     val theme = componentScreen.theme
                     if (theme != null && SSRLogging.isEnabled) {
-                        Timber.d("🎨 Theme found: primary=${theme.primaryColor}, background=${theme.backgroundColor}")
+                        Timber.d("Theme found: primary=${theme.primaryColor}, background=${theme.backgroundColor}")
                     } else if (SSRLogging.isEnabled) {
-                        Timber.d("🎨 No theme provided, using default")
+                        Timber.d("No theme provided, using default")
                     }
                     RenderPrecompiledComponent(precompiledComponents)
                 }
 
                 val tree = ComposableTree(rootComponent, metadata)
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ Component tree built successfully")
+                    Timber.d("Component tree built successfully")
                 }
                 return@withContext tree
 
             } catch (e: Exception) {
-                Timber.e(e, "💥 Error building component tree")
+                Timber.e(e, "Error building component tree")
                 if (SSRLogging.isEnabled) {
-                    Timber.e("📄 JSON content: $json")
+                    Timber.e("JSON content: $json")
                 }
                 throw e
             }
@@ -227,7 +228,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     private suspend fun precompileComponentsWithFactory(node: ComponentNode): PrecompiledComponent =
         withContext(dispatcher) {
             if (SSRLogging.isEnabled) {
-                Timber.d("🔧 Precompiling component: ${node.type} (id: ${node.id})")
+                Timber.d("Precompiling component: ${node.type} (id: ${node.id})")
             }
 
             try {
@@ -238,7 +239,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
 
                 when (result) {
                     is ComponentPreparationResult.Error -> {
-                        Timber.w("⚠️ Component preparation failed for ${node.type}: ${result.message}")
+                        Timber.w("Component preparation failed for ${node.type}: ${result.message}")
                         return@withContext PrecompiledComponent(
                             type = componentType,
                             properties = properties,
@@ -254,18 +255,18 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
 
                     is ComponentPreparationResult.Success -> {
                         if (SSRLogging.isEnabled) {
-                            Timber.d("✅ Component preparation successful for ${node.type}")
+                            Timber.d("Component preparation successful for ${node.type}")
                         }
 
                         val children = node.children?.mapIndexed { index, child ->
                             if (SSRLogging.isEnabled) {
-                                Timber.d("🔗 Processing child $index of ${node.type}: ${child.type}")
+                                Timber.d("Processing child $index of ${node.type}: ${child.type}")
                             }
                             precompileComponentsWithFactory(child) // Fixed: was 'node' before!
                         } ?: emptyList()
 
                         if (SSRLogging.isEnabled) {
-                            Timber.d("👶 Processed ${children.size} children for ${node.type}")
+                            Timber.d("Processed ${children.size} children for ${node.type}")
                         }
 
                         return@withContext PrecompiledComponent(
@@ -281,7 +282,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                     }
                 }
             } catch (e: Exception) {
-                Timber.e(e, "💥 Error precompiling component ${node.type}")
+                Timber.e(e, "Error precompiling component ${node.type}")
                 // Return fallback component
                 return@withContext PrecompiledComponent(
                     type = ComponentType.fromString(node.type),
@@ -300,7 +301,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
 
     override fun clearCache() {
         if (SSRLogging.isEnabled) {
-            Timber.d("🗑️ Clearing cache (was ${componentCache.size} items)")
+            Timber.d("Clearing cache (was ${componentCache.size} items)")
         }
         componentCache.clear()
     }
@@ -308,7 +309,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     override fun getCacheSize(): Int {
         val size = componentCache.size
         if (SSRLogging.isEnabled) {
-            Timber.d("📊 Cache size: $size")
+            Timber.d("Cache size: $size")
         }
         return size
     }
@@ -316,7 +317,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     @Composable
     private fun RenderPrecompiledComponent(precompiled: PrecompiledComponent) {
         if (SSRLogging.isEnabled) {
-            Timber.d("🎭 Rendering precompiled component: ${precompiled.type}")
+            Timber.d("Rendering precompiled component: ${precompiled.type}")
         }
         precompiled.factoryComponent()
     }
@@ -324,12 +325,12 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     private suspend fun parseComponentJson(json: String): ComponentScreen {
         return withContext(dispatcher) {
             if (SSRLogging.isEnabled) {
-                Timber.d("📖 Parsing JSON...")
+                Timber.d("Parsing JSON...")
             }
             try {
                 val result = gson.fromJson(json, ComponentScreen::class.java)
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ JSON parsing successful")
+                    Timber.d("JSON parsing successful")
                 }
 
                 // Validate required fields
@@ -338,14 +339,14 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                 }
 
                 if (SSRLogging.isEnabled) {
-                    Timber.d("✅ JSON validation passed")
+                    Timber.d("JSON validation passed")
                 }
                 return@withContext result
 
             } catch (e: Exception) {
                 Timber.e(e, "💥 JSON parsing failed")
                 if (SSRLogging.isEnabled) {
-                    Timber.e("📄 Invalid JSON: $json")
+                    Timber.e("Invalid JSON: $json")
                 }
                 throw e
             }
@@ -355,7 +356,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
     private suspend fun analyzeComponentTree(node: ComponentNode): ComponentMetadata {
         return withContext(dispatcher) {
             if (SSRLogging.isEnabled) {
-                Timber.d("🔍 Analyzing component tree...")
+                Timber.d("Analyzing component tree...")
             }
             var componentCount = 0
             var maxDepth = 0
@@ -366,7 +367,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                 maxDepth = maxOf(maxDepth, depth)
 
                 if (SSRLogging.isEnabled && SSRLogging.isVerboseEnabled) {
-                    Timber.v("🔍 Analyzing: ${node.type} at depth $depth")
+                    Timber.v("Analyzing: ${node.type} at depth $depth")
                 }
 
                 if (node.type in listOf("lazy_column", "lazy_row", "lazy_grid") &&
@@ -374,13 +375,13 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
                 ) {
                     hasAsyncComponents = true
                     if (SSRLogging.isEnabled) {
-                        Timber.d("🌐 Found async component: ${node.type}")
+                        Timber.d("Found async component: ${node.type}")
                     }
                 }
 
                 node.children?.forEachIndexed { index, child ->
                     if (SSRLogging.isEnabled && SSRLogging.isVerboseEnabled) {
-                        Timber.v("👶 Child $index: ${child.type}")
+                        Timber.v("Child $index: ${child.type}")
                     }
                     analyzeNode(child, depth + 1)
                 }
@@ -396,7 +397,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
             )
 
             if (SSRLogging.isEnabled) {
-                Timber.d("📊 Analysis complete: $componentCount components, depth $maxDepth, async: $hasAsyncComponents")
+                Timber.d("Analysis complete: $componentCount components, depth $maxDepth, async: $hasAsyncComponents")
             }
             return@withContext metadata
         }
@@ -404,7 +405,7 @@ class ServerSideRendererImpl @OptIn(ExperimentalCoroutinesApi::class) constructo
 
     private fun precompileModifier(modifierConfig: ModifierConfig?): CompiledModifier {
         if (SSRLogging.isEnabled && SSRLogging.isVerboseEnabled) {
-            Timber.v("🎛️ Precompiling modifier: $modifierConfig")
+            Timber.v("Precompiling modifier: $modifierConfig")
         }
         return CompiledModifier(
             padding = modifierConfig?.padding,

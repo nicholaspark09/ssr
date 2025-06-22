@@ -1,9 +1,20 @@
 package com.cincinnatiai.ssr_library.componentfactory
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -56,8 +67,8 @@ import com.cincinnatiai.ssr_library.model.ModifierConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.text.get
 
 enum class ComponentComplexity {
     LOW, MEDIUM, HIGH
@@ -67,12 +78,12 @@ data class ComponentRenderMetadata(
     val requiresAsyncData: Boolean = false,
     val estimatedComplexity: ComponentComplexity = ComponentComplexity.LOW,
     val dependencies: List<String> = emptyList(),
-    val cacheKey: String? = null
+    val cacheKey: String? = null,
 )
 
 data class CompiledItemTemplate(
     val originalTemplate: ItemTemplate,
-    val preparedComponent: ComponentPreparationResult
+    val preparedComponent: ComponentPreparationResult,
 )
 
 sealed class ValidationResult {
@@ -84,27 +95,27 @@ sealed class ValidationResult {
 sealed class ComponentPreparationResult {
     data class Success(
         val component: @Composable () -> Unit,
-        val metadata: ComponentRenderMetadata
+        val metadata: ComponentRenderMetadata,
     ) : ComponentPreparationResult()
 
     data class Error(
         val message: String,
-        val fallbackComponent: (@Composable () -> Unit)? = null
+        val fallbackComponent: (@Composable () -> Unit)? = null,
     ) : ComponentPreparationResult()
 }
 
 class DefaultComponentFactory(
     private val actionHandler: ActionHandler = DefaultActionHandler(),
-    private val imageLoader: ImageLoader = CoilImageLoader()
+    private val imageLoader: ImageLoader = CoilImageLoader(),
 ) : ComponentFactory {
 
     private val preparationCache = ConcurrentHashMap<String, ComponentPreparationResult>()
 
     override suspend fun prepareComponent(node: ComponentNode): ComponentPreparationResult {
-        Log.d("SSR_PREPARE", "Preparing component: type='${node.type}', id='${node.id}'")
+        Timber.tag("SSR_PREPARE").d("Preparing component: type='${node.type}', id='${node.id}'")
 
-        if (node.type.isNullOrBlank()) {
-            Log.e("SSR_PREPARE", "NULL TYPE ERROR - Node: $node")
+        if (node.type.isBlank()) {
+            Timber.tag("SSR_PREPARE").e("NULL TYPE ERROR - Node: $node")
             return ComponentPreparationResult.Error("Component type is null")
         }
         val cacheKey = generateCacheKey(node)
@@ -116,12 +127,14 @@ class DefaultComponentFactory(
                         return@withContext ComponentPreparationResult.Error(
                             message = "Validation failed: ${validation.errors.joinToString(", ")}",
                             fallbackComponent = {
-                                Text("Invalid component: ${node.type}") }
+                                Text("Invalid component: ${node.type}")
+                            }
                         )
                     }
 
                     is ValidationResult.Warning ->
-                        Log.w("SSRLibrary", "Component warnings: ${validation.warnings.joinToString(", ")}")
+                        Timber.tag("SSRLibrary")
+                            .w("Component warnings: ${validation.warnings.joinToString(", ")}")
 
                     ValidationResult.Valid -> {
                         // Continue processing
@@ -146,30 +159,86 @@ class DefaultComponentFactory(
 
     override fun createComponent(node: ComponentNode): @Composable () -> Unit =
         when (node.type) {
-            "column" -> { { CreateColumn(node) } }
-            "scrollable_column" -> { { CreateScrollableColumn(node) } }
-            "row" -> { { CreateRow(node) } }
-            "text" -> { { CreateText(node) } }
-            "button" -> { { CreateButton(node) } }
-            "image" -> { { CreateImage(node) } }
-            "spacer" -> { { CreateSpacer(node) } }
-            "lazy_column" -> { { CreateLazyColumn(node) } }
-            "enhanced_lazy_column" -> { { CreateEnhancedLazyColumn(node) }}
-            "lazy_row" -> { { CreateLazyRow(node) } }
-            "card" -> { { CreateCard(node) } }
-            "top_app_bar" -> { { CreateTopAppBar(node) } }
-            "progress_indicator" -> {{ ShowLoadingState(node) }}
-            "bar_chart" -> { { CreateBarChart(node) } }
-            "line_chart" -> { { CreateLineChart(node) } }
-            "pie_chart" -> { { CreatePieChart(node) } }
-            "bubble_chart" -> { { CreateBubbleChart(node) } }
-            "radar_chart" -> { { CreateRadarChart(node) } }
-            else -> { {
-                Text(
-                    "Unknown component type: ${node.type}",
-                    color = MaterialTheme.colorScheme.error
-                )
-            } }
+            "column" -> {
+                { CreateColumn(node) }
+            }
+
+            "scrollable_column" -> {
+                { CreateScrollableColumn(node) }
+            }
+
+            "row" -> {
+                { CreateRow(node) }
+            }
+
+            "text" -> {
+                { CreateText(node) }
+            }
+
+            "button" -> {
+                { CreateButton(node) }
+            }
+
+            "image" -> {
+                { CreateImage(node) }
+            }
+
+            "spacer" -> {
+                { CreateSpacer(node) }
+            }
+
+            "lazy_column" -> {
+                { CreateLazyColumn(node) }
+            }
+
+            "enhanced_lazy_column" -> {
+                { CreateEnhancedLazyColumn(node) }
+            }
+
+            "lazy_row" -> {
+                { CreateLazyRow(node) }
+            }
+
+            "card" -> {
+                { CreateCard(node) }
+            }
+
+            "top_app_bar" -> {
+                { CreateTopAppBar(node) }
+            }
+
+            "progress_indicator" -> {
+                { ShowLoadingState(node) }
+            }
+
+            "bar_chart" -> {
+                { CreateBarChart(node) }
+            }
+
+            "line_chart" -> {
+                { CreateLineChart(node) }
+            }
+
+            "pie_chart" -> {
+                { CreatePieChart(node) }
+            }
+
+            "bubble_chart" -> {
+                { CreateBubbleChart(node) }
+            }
+
+            "radar_chart" -> {
+                { CreateRadarChart(node) }
+            }
+
+            else -> {
+                {
+                    Text(
+                        "Unknown component type: ${node.type}",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
         }
 
     fun validateComponent(node: ComponentNode): ValidationResult {
@@ -207,11 +276,13 @@ class DefaultComponentFactory(
                     errors.add("Lazy components require itemTemplate")
                 }
             }
+
             "top_app_bar" -> {
                 if (node.properties?.get("title") == null) {
                     warnings.add("TopAppBar missing 'title' property")
                 }
             }
+
             "bar_chart", "pie_chart", "bubble_chart", "radar_chart" -> {
                 if (node.properties?.get("data") == null) {
                     errors.add("${node.type} requires 'data' property")
@@ -244,7 +315,7 @@ class DefaultComponentFactory(
 
     private suspend fun prepareComponentByType(
         node: ComponentNode,
-        metadata: ComponentRenderMetadata
+        metadata: ComponentRenderMetadata,
     ): @Composable () -> Unit {
         return when (metadata.estimatedComplexity) {
             ComponentComplexity.HIGH -> prepareComplexComponent(node)
@@ -258,6 +329,7 @@ class DefaultComponentFactory(
             "lazy_column", "lazy_row" -> {
                 prepareLazyComponent(node)
             }
+
             else -> createComponent(node)
         }
     }
@@ -329,7 +401,7 @@ class DefaultComponentFactory(
     @Composable
     private fun AsyncLazyColumn(
         node: ComponentNode,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         val dataSource = node.dataSource ?: return
 
@@ -343,7 +415,7 @@ class DefaultComponentFactory(
     @Composable
     private fun AsyncLazyRow(
         node: ComponentNode,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         val dataSource = node.dataSource ?: return
 
@@ -358,7 +430,7 @@ class DefaultComponentFactory(
     private fun ApiLazyRow(
         node: ComponentNode,
         dataSource: DataSource,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         var items by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
         var isLoading by remember { mutableStateOf(true) }
@@ -370,6 +442,7 @@ class DefaultComponentFactory(
                         items = result.data
                         isLoading = false
                     }
+
                     is ApiResult.Error -> {
                         isLoading = false
                     }
@@ -400,7 +473,7 @@ class DefaultComponentFactory(
     private suspend fun loadApiData(
         dataSource: DataSource,
         page: Int,
-        callback: (ApiResult) -> Unit
+        callback: (ApiResult) -> Unit,
     ) {
         try {
             withContext(Dispatchers.IO) {
@@ -438,7 +511,7 @@ class DefaultComponentFactory(
         val backgroundColor = props["backgroundColor"] as? String
         val titleColor = props["titleColor"] as? String
 
-        Log.d("SSR_APP_BAR", "Creating TopAppBar: title='$title', center=$centerTitle")
+        Timber.tag("SSR_APP_BAR").d("Creating TopAppBar: title='$title', center=$centerTitle")
 
         val bgColor = backgroundColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.surface
         val textColor = titleColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
@@ -481,10 +554,10 @@ class DefaultComponentFactory(
     private fun StaticLazyColumn(
         node: ComponentNode,
         dataSource: DataSource,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         val items = dataSource.items ?: emptyList()
-        Log.d("SSR_STATIC", "StaticLazyColumn rendering ${items.size} items")
+        Timber.tag("SSR_STATIC").d("StaticLazyColumn rendering ${items.size} items")
 
         if (items.isEmpty()) {
             node.emptyTemplate?.let { emptyTemplate ->
@@ -502,20 +575,23 @@ class DefaultComponentFactory(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(items) { item ->
-                    Log.d("SSR_STATIC", "Rendering item: $item")
+                    Timber.tag("SSR_STATIC").d("Rendering item: $item")
 
                     val wrappedData = mapOf("item" to item)
 
-                    val boundTemplate = bindDataToTemplate(compiledTemplate.originalTemplate.layout, wrappedData)
+                    val boundTemplate =
+                        bindDataToTemplate(compiledTemplate.originalTemplate.layout, wrappedData)
                     val itemComponent = createComponent(boundTemplate)
 
-                    val clickHandler = compiledTemplate.originalTemplate.actions?.get("onClick")?.let { action ->
-                        val boundAction = bindDataToAction(action, wrappedData)
-                        return@let {
-                            Log.d("SSR_STATIC_ACTION", "Item clicked: ${boundAction.destination}")
-                            actionHandler.handleAction(boundAction)
+                    val clickHandler =
+                        compiledTemplate.originalTemplate.actions?.get("onClick")?.let { action ->
+                            val boundAction = bindDataToAction(action, wrappedData)
+                            return@let {
+                                Timber.tag("SSR_STATIC_ACTION")
+                                    .d("Item clicked: ${boundAction.destination}")
+                                actionHandler.handleAction(boundAction)
+                            }
                         }
-                    }
 
                     if (clickHandler != null) {
                         Box(
@@ -535,7 +611,7 @@ class DefaultComponentFactory(
     private fun StaticLazyRow(
         node: ComponentNode,
         dataSource: DataSource,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         val items = dataSource.items ?: emptyList()
 
@@ -552,17 +628,19 @@ class DefaultComponentFactory(
     @Composable
     private fun RenderCompiledItem(
         compiledTemplate: CompiledItemTemplate,
-        item: Map<String, Any>
+        item: Map<String, Any>,
     ) {
         when (val result = compiledTemplate.preparedComponent) {
             is ComponentPreparationResult.Success -> {
-                val boundTemplate = bindDataToTemplate(compiledTemplate.originalTemplate.layout, item)
+                val boundTemplate =
+                    bindDataToTemplate(compiledTemplate.originalTemplate.layout, item)
                 val itemComponent = createComponent(boundTemplate)
 
-                val clickHandler = compiledTemplate.originalTemplate.actions?.get("onClick")?.let { action ->
-                    val boundAction = bindDataToAction(action, item)
-                    return@let { actionHandler.handleAction(boundAction) }
-                }
+                val clickHandler =
+                    compiledTemplate.originalTemplate.actions?.get("onClick")?.let { action ->
+                        val boundAction = bindDataToAction(action, item)
+                        return@let { actionHandler.handleAction(boundAction) }
+                    }
 
                 if (clickHandler != null) {
                     Box(
@@ -574,6 +652,7 @@ class DefaultComponentFactory(
                     itemComponent()
                 }
             }
+
             is ComponentPreparationResult.Error -> {
                 result.fallbackComponent?.invoke() ?: Text("Error rendering item")
             }
@@ -581,12 +660,13 @@ class DefaultComponentFactory(
     }
 
     private fun bindDataToTemplate(template: ComponentNode, data: Map<String, Any>): ComponentNode {
-        Log.d("SSR_BINDING", "Binding template ${template.type} with data keys: ${data.keys}, values: ${data.values}")
+        Timber.tag("SSR_BINDING")
+            .d("Binding template ${template.type} with data keys: ${data.keys}, values: ${data.values}")
 
         val boundProperties = template.properties?.mapValues { (key, value) ->
             if (value is String && value.contains("{{")) {
                 val boundValue = bindStringTemplate(value, data)
-                Log.d("SSR_BINDING", "Property $key: '$value' -> '$boundValue'")
+                Timber.tag("SSR_BINDING").d("Property $key: '$value' -> '$boundValue'")
                 boundValue
             } else {
                 value
@@ -615,65 +695,70 @@ class DefaultComponentFactory(
         var result = template
         val regex = "\\{\\{([^}]+)\\}\\}".toRegex()
 
-        Log.d("SSR_BINDING", "Binding template: '$template'")
-        Log.d("SSR_BINDING", "Available data keys: ${data.keys}")
-        Log.d("SSR_BINDING", "Full data structure: $data")
+        Timber.tag("SSR_BINDING").d("Binding template: '$template'")
+        Timber.tag("SSR_BINDING").d("Available data keys: ${data.keys}")
+        Timber.tag("SSR_BINDING").d("Full data structure: $data")
 
         regex.findAll(template).forEach { match ->
             val key = match.groupValues[1].trim()
-            Log.d("SSR_BINDING", "Looking for key: '$key'")
+            Timber.tag("SSR_BINDING").d("Looking for key: '$key'")
 
             val value = getNestedValue(data, key)
-            Log.d("SSR_BINDING", "Found value for '$key': $value (type: ${value?.javaClass?.simpleName})")
+            Timber.tag("SSR_BINDING")
+                .d("Found value for '$key': $value (type: ${value?.javaClass?.simpleName})")
 
             val stringValue = when (value) {
                 is Number -> value.toString()
                 is String -> value
                 is Boolean -> value.toString()
                 null -> {
-                    Log.w("SSR_BINDING", "NULL value for key '$key' in data: $data")
+                    Timber.tag("SSR_BINDING").w("NULL value for key '$key' in data: $data")
                     ""
                 }
+
                 else -> value.toString()
             }
 
             result = result.replace(match.value, stringValue)
-            Log.d("SSR_BINDING", "Replaced '${match.value}' with '$stringValue'")
+            Timber.tag("SSR_BINDING").d("Replaced '${match.value}' with '$stringValue'")
         }
 
-        Log.d("SSR_BINDING", "Final result: '$result'")
+        Timber.tag("SSR_BINDING").d("Final result: '$result'")
         return result
     }
 
     private fun getNestedValue(data: Map<String, Any>, key: String): Any? {
-        Log.d("SSR_NESTED", "Getting nested value for key: '$key'")
+        Timber.tag("SSR_NESTED").d("Getting nested value for key: '$key'")
 
         val parts = key.split(".")
         var current: Any? = data
 
         for (i in parts.indices) {
             val part = parts[i]
-            Log.d("SSR_NESTED", "Looking for part '$part' in: ${current?.javaClass?.simpleName}")
+            Timber.tag("SSR_NESTED")
+                .d("Looking for part '$part' in: ${current?.javaClass?.simpleName}")
 
             current = when (current) {
                 is Map<*, *> -> {
                     val value = current[part]
-                    Log.d("SSR_NESTED", "Found '$part' = $value")
+                    Timber.tag("SSR_NESTED").d("Found '$part' = $value")
                     value
                 }
+
                 else -> {
-                    Log.w("SSR_NESTED", "Cannot access '$part' - current is not a Map: $current")
+                    Timber.tag("SSR_NESTED")
+                        .w("Cannot access '$part' - current is not a Map: $current")
                     null
                 }
             }
 
             if (current == null) {
-                Log.w("SSR_NESTED", "Null value at part '$part' - stopping traversal")
+                Timber.tag("SSR_NESTED").w("Null value at part '$part' - stopping traversal")
                 break
             }
         }
 
-        Log.d("SSR_NESTED", "Final nested value: $current")
+        Timber.tag("SSR_NESTED").d("Final nested value: $current")
         return current
     }
 
@@ -686,7 +771,7 @@ class DefaultComponentFactory(
     private fun ApiLazyColumn(
         node: ComponentNode,
         dataSource: DataSource,
-        compiledTemplate: CompiledItemTemplate
+        compiledTemplate: CompiledItemTemplate,
     ) {
         var items by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
         var isLoading by remember { mutableStateOf(true) }
@@ -702,6 +787,7 @@ class DefaultComponentFactory(
                         isLoading = false
                         hasError = false
                     }
+
                     is ApiResult.Error -> {
                         isLoading = false
                         hasError = true
@@ -714,15 +800,18 @@ class DefaultComponentFactory(
             isLoading && items.isEmpty() -> {
                 ShowLoadingState(node)
             }
+
             hasError && items.isEmpty() -> {
                 ShowErrorState(node) {
                     isLoading = true
                     hasError = false
                 }
             }
+
             items.isEmpty() -> {
                 ShowEmptyState(node)
             }
+
             else -> {
                 LazyColumn(
                     modifier = createModifier(node.modifier)
@@ -743,6 +832,7 @@ class DefaultComponentFactory(
                                                 canLoadMore = false
                                             }
                                         }
+
                                         is ApiResult.Error -> {
                                             // Handle pagination error
                                         }
@@ -981,7 +1071,8 @@ class DefaultComponentFactory(
             else -> MaterialTheme.typography.bodyLarge
         }
 
-        Log.d("SSR_TEXT", "Creating text component with text: '$text', style: ${props["style"]}")
+        Timber.tag("SSR_TEXT")
+            .d("Creating text component with text: '$text', style: ${props["style"]}")
 
         Text(
             text = text,
@@ -1048,12 +1139,15 @@ class DefaultComponentFactory(
             height != null && width != null -> {
                 Spacer(modifier = Modifier.size(width.dp, height.dp))
             }
+
             height != null -> {
                 Spacer(modifier = Modifier.height(height.dp))
             }
+
             width != null -> {
                 Spacer(modifier = Modifier.width(width.dp))
             }
+
             else -> {
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -1069,7 +1163,7 @@ class DefaultComponentFactory(
             when (dataSource.type) {
                 "static" -> {
                     val items = dataSource.items ?: emptyList()
-                    Log.d("SSR_LAZY", "Creating static LazyColumn with ${items.size} items")
+                    Timber.tag("SSR_LAZY").d("Creating static LazyColumn with ${items.size} items")
 
                     if (items.isEmpty()) {
                         Box(
@@ -1084,21 +1178,24 @@ class DefaultComponentFactory(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             items(items) { item ->
-                                Log.d("SSR_ITEM", "Original item: $item")
+                                Timber.tag("SSR_ITEM").d("Original item: $item")
 
                                 val wrappedData = mapOf("item" to item)
-                                Log.d("SSR_ITEM", "Wrapped data: $wrappedData")
+                                Timber.tag("SSR_ITEM").d("Wrapped data: $wrappedData")
 
-                                val boundTemplate = bindDataToTemplate(itemTemplate.layout, wrappedData)
+                                val boundTemplate =
+                                    bindDataToTemplate(itemTemplate.layout, wrappedData)
                                 val itemComponent = createComponent(boundTemplate)
 
-                                val clickHandler = itemTemplate.actions?.get("onClick")?.let { action ->
-                                    val boundAction = bindDataToAction(action, wrappedData)
-                                    return@let {
-                                        Log.d("SSR_ACTION", "Item clicked: ${boundAction.destination}")
-                                        actionHandler.handleAction(boundAction)
+                                val clickHandler =
+                                    itemTemplate.actions?.get("onClick")?.let { action ->
+                                        val boundAction = bindDataToAction(action, wrappedData)
+                                        return@let {
+                                            Timber.tag("SSR_ACTION")
+                                                .d("Item clicked: ${boundAction.destination}")
+                                            actionHandler.handleAction(boundAction)
+                                        }
                                     }
-                                }
 
                                 if (clickHandler != null) {
                                     Box(
@@ -1113,9 +1210,11 @@ class DefaultComponentFactory(
                         }
                     }
                 }
+
                 "api" -> {
                     Text("API LazyColumn not implemented in simple version")
                 }
+
                 else -> {
                     Text("Unsupported data source type: ${dataSource.type}")
                 }
@@ -1134,7 +1233,8 @@ class DefaultComponentFactory(
             when (dataSource.type) {
                 "static" -> {
                     val items = dataSource.items ?: emptyList()
-                    Log.d("SSR_ENHANCED_LAZY", "Creating enhanced LazyColumn with ${items.size} items")
+                    Timber.tag("SSR_ENHANCED_LAZY")
+                        .d("Creating enhanced LazyColumn with ${items.size} items")
 
                     if (items.isEmpty()) {
                         Box(
@@ -1156,10 +1256,14 @@ class DefaultComponentFactory(
                                         // Parse custom template for this item
                                         parseComponentNode(item["template"])
                                     }
+
                                     item is Map<*, *> && item.containsKey("component_type") -> {
                                         // Create template based on component type
-                                        createTemplateForType(item["component_type"] as? String ?: "default", item)
+                                        createTemplateForType(
+                                            item["component_type"] as? String ?: "default", item
+                                        )
                                     }
+
                                     else -> itemTemplate.layout
                                 }
 
@@ -1171,13 +1275,15 @@ class DefaultComponentFactory(
                                 val boundTemplate = bindDataToTemplate(templateToUse, wrappedData)
                                 val itemComponent = createComponent(boundTemplate)
 
-                                val clickHandler = itemTemplate.actions?.get("onClick")?.let { action ->
-                                    val boundAction = bindDataToAction(action, wrappedData)
-                                    return@let {
-                                        Log.d("SSR_ENHANCED_ACTION", "Item clicked: ${boundAction.destination}")
-                                        actionHandler.handleAction(boundAction)
+                                val clickHandler =
+                                    itemTemplate.actions?.get("onClick")?.let { action ->
+                                        val boundAction = bindDataToAction(action, wrappedData)
+                                        return@let {
+                                            Timber.tag("SSR_ENHANCED_ACTION")
+                                                .d("Item clicked: ${boundAction.destination}")
+                                            actionHandler.handleAction(boundAction)
+                                        }
                                     }
-                                }
 
                                 if (clickHandler != null) {
                                     Box(
@@ -1192,9 +1298,11 @@ class DefaultComponentFactory(
                         }
                     }
                 }
+
                 "api" -> {
                     Text("API LazyColumn not implemented in enhanced version")
                 }
+
                 else -> {
                     Text("Unsupported data source type: ${dataSource.type}")
                 }
@@ -1307,6 +1415,7 @@ class DefaultComponentFactory(
                     actions = map["actions"] as? Map<String, ActionConfig>
                 )
             }
+
             else -> ComponentNode(type = "text", properties = mapOf("text" to "Invalid template"))
         }
     }
@@ -1324,6 +1433,7 @@ class DefaultComponentFactory(
                     weight = (map["weight"] as? Number)?.toFloat()
                 )
             }
+
             else -> null
         }
     }
@@ -1347,6 +1457,7 @@ class DefaultComponentFactory(
                         }
                     }
                 }
+
                 else -> {
                     Text("Unsupported data source type for LazyRow: ${dataSource.type}")
                 }
@@ -1381,7 +1492,7 @@ class DefaultComponentFactory(
         val chartData = parseChartData(props["data"])
         val config = parseChartConfig(props)
 
-        Log.d("SSR_CHART", "Creating BarChart with ${chartData.size} data points")
+        Timber.tag("SSR_CHART").d("Creating BarChart with ${chartData.size} data points")
 
         BarChart(
             data = chartData,
@@ -1396,7 +1507,7 @@ class DefaultComponentFactory(
         val series = parseSeriesData(props["series"])
         val config = parseChartConfig(props)
 
-        Log.d("SSR_CHART", "Creating LineChart with ${series.size} series")
+        Timber.tag("SSR_CHART").d("Creating LineChart with ${series.size} series")
 
         LineChart(
             series = series,
@@ -1413,7 +1524,7 @@ class DefaultComponentFactory(
         val chartData = parseChartData(props["data"])
         val config = parseChartConfig(props)
 
-        Log.d("SSR_CHART", "Creating PieChart with ${chartData.size} data points")
+        Timber.tag("SSR_CHART").d("Creating PieChart with ${chartData.size} data points")
 
         PieChart(
             data = chartData,
@@ -1429,7 +1540,7 @@ class DefaultComponentFactory(
         val chartData = parseChartData(props["data"])
         val config = parseChartConfig(props)
 
-        Log.d("SSR_CHART", "Creating BubbleChart with ${chartData.size} data points")
+        Timber.tag("SSR_CHART").d("Creating BubbleChart with ${chartData.size} data points")
 
         BubbleChart(
             data = chartData,
@@ -1445,7 +1556,7 @@ class DefaultComponentFactory(
         val chartData = parseChartData(props["data"])
         val config = parseChartConfig(props)
 
-        Log.d("SSR_CHART", "Creating RadarChart with ${chartData.size} data points")
+        Timber.tag("SSR_CHART").d("Creating RadarChart with ${chartData.size} data points")
 
         RadarChart(
             data = chartData,
@@ -1478,10 +1589,12 @@ class DefaultComponentFactory(
                                 metadata = metadata
                             )
                         }
+
                         else -> null
                     }
                 }
             }
+
             else -> emptyList()
         }
     }
@@ -1502,10 +1615,12 @@ class DefaultComponentFactory(
                                 color = color
                             )
                         }
+
                         else -> null
                     }
                 }
             }
+
             else -> emptyList()
         }
     }
