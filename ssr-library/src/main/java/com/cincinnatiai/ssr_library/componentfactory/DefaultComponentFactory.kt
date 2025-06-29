@@ -1035,8 +1035,19 @@ class DefaultComponentFactory(
 
     @Composable
     private fun CreateRow(node: ComponentNode) {
+        val props = node.properties ?: emptyMap()
+        var horizontalArrangement = Arrangement.Start
+        val horizontalSetting = props["horizontalArrangement"] as? String ?: ""
+        when(horizontalSetting) {
+            "end" -> horizontalArrangement = Arrangement.End
+            "center" -> horizontalArrangement = Arrangement.Center
+            "spaceBetween" -> horizontalArrangement = Arrangement.SpaceBetween
+            "spaceEvenly" -> horizontalArrangement = Arrangement.SpaceEvenly
+            "spaceAround" -> horizontalArrangement = Arrangement.SpaceAround
+        }
         Row(
-            modifier = createModifier(node.modifier)
+            modifier = createModifier(node.modifier),
+            horizontalArrangement = horizontalArrangement
         ) {
             node.children?.forEach { child ->
                 val childWeight = child.modifier?.weight

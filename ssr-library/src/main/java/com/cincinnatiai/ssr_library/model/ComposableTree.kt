@@ -61,7 +61,7 @@ data class ModifierConfig(
     val fillMaxWidth: Boolean? = null,
     val width: Int? = null,
     val height: Int? = null,
-    val weight: Float? = null
+    val weight: Float? = null,
 )
 
 data class ActionConfig(
