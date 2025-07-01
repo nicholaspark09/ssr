@@ -23,12 +23,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -511,10 +517,50 @@ class DefaultComponentFactory(
         val backgroundColor = props["backgroundColor"] as? String
         val titleColor = props["titleColor"] as? String
 
-        Timber.tag("SSR_APP_BAR").d("Creating TopAppBar: title='$title', center=$centerTitle")
+        val showNavigationIcon = props["showNavigationIcon"] as? Boolean == true
+        val navigationIconType = props["navigationIconType"] as? String ?: "back" // "back", "close", "menu"
+        val navigationIconColor = props["navigationIconColor"] as? String
+
+        Timber.tag("SSR_APP_BAR").d("Creating TopAppBar: title='$title', center=$centerTitle, showNav=$showNavigationIcon")
 
         val bgColor = backgroundColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.surface
         val textColor = titleColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
+        val navIconColor = navigationIconColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
+
+        val onNavigationClick = node.actions?.get("onNavigationClick")?.let { action ->
+            { actionHandler.handleAction(action) }
+        } ?: {
+            Timber.tag("SSR_APP_BAR").d("Navigation icon clicked - no action configured")
+        }
+
+        val navigationIcon: @Composable (() -> Unit)? = if (showNavigationIcon) {
+            {
+                IconButton(onClick = onNavigationClick) {
+                    when (navigationIconType) {
+                        "back" -> Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = navIconColor
+                        )
+                        "close" -> Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close",
+                            tint = navIconColor
+                        )
+                        "menu" -> Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = "Menu",
+                            tint = navIconColor
+                        )
+                        else -> Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Navigate",
+                            tint = navIconColor
+                        )
+                    }
+                }
+            }
+        } else null
 
         if (centerTitle) {
             CenterAlignedTopAppBar(
@@ -526,9 +572,11 @@ class DefaultComponentFactory(
                         fontWeight = FontWeight.Medium
                     )
                 },
+                navigationIcon = navigationIcon ?: {},
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = bgColor,
-                    titleContentColor = textColor
+                    titleContentColor = textColor,
+                    navigationIconContentColor = navIconColor
                 ),
                 modifier = createModifier(node.modifier)
             )
@@ -541,9 +589,11 @@ class DefaultComponentFactory(
                         style = MaterialTheme.typography.titleLarge
                     )
                 },
+                navigationIcon = navigationIcon ?: {},
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = bgColor,
-                    titleContentColor = textColor
+                    titleContentColor = textColor,
+                    navigationIconContentColor = navIconColor
                 ),
                 modifier = createModifier(node.modifier)
             )

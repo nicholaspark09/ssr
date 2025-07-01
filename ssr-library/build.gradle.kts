@@ -49,7 +49,7 @@ afterEvaluate {
 
                 groupId = "com.cincinnatiai"
                 artifactId = "ssr-library"
-                version = "0.0.15"
+                version = "0.0.16"
 
                 pom {
                     name.set("SSR Library")
