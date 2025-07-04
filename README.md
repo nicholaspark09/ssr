@@ -13,7 +13,7 @@
 
 ## SSR Library
 [README](./ssr-library/README.md)
-- Current version is 0.0.1
+- Current version is 0.0.17
 - Backend servers can use the Go library to create JSON: https://github.com/nicholaspark09/ssr-go
 
 ## TODO
