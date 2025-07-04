@@ -48,9 +48,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.cincinnatiai.ssr_library.ComponentFactory
 import com.cincinnatiai.ssr_library.component.charts.BarChart
 import com.cincinnatiai.ssr_library.component.charts.BubbleChart
@@ -67,6 +71,7 @@ import com.cincinnatiai.ssr_library.model.CoilImageLoader
 import com.cincinnatiai.ssr_library.model.ComponentNode
 import com.cincinnatiai.ssr_library.model.DataSource
 import com.cincinnatiai.ssr_library.model.DefaultActionHandler
+import com.cincinnatiai.ssr_library.model.GradientConfig
 import com.cincinnatiai.ssr_library.model.ImageLoader
 import com.cincinnatiai.ssr_library.model.ItemTemplate
 import com.cincinnatiai.ssr_library.model.ModifierConfig
@@ -75,6 +80,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.cos
+import kotlin.math.sin
 
 enum class ComponentComplexity {
     LOW, MEDIUM, HIGH
@@ -518,14 +525,17 @@ class DefaultComponentFactory(
         val titleColor = props["titleColor"] as? String
 
         val showNavigationIcon = props["showNavigationIcon"] as? Boolean == true
-        val navigationIconType = props["navigationIconType"] as? String ?: "back" // "back", "close", "menu"
+        val navigationIconType =
+            props["navigationIconType"] as? String ?: "back" // "back", "close", "menu"
         val navigationIconColor = props["navigationIconColor"] as? String
 
-        Timber.tag("SSR_APP_BAR").d("Creating TopAppBar: title='$title', center=$centerTitle, showNav=$showNavigationIcon")
+        Timber.tag("SSR_APP_BAR")
+            .d("Creating TopAppBar: title='$title', center=$centerTitle, showNav=$showNavigationIcon")
 
         val bgColor = backgroundColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.surface
         val textColor = titleColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
-        val navIconColor = navigationIconColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
+        val navIconColor =
+            navigationIconColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.onSurface
 
         val onNavigationClick = node.actions?.get("onNavigationClick")?.let { action ->
             { actionHandler.handleAction(action) }
@@ -542,16 +552,19 @@ class DefaultComponentFactory(
                             contentDescription = "Back",
                             tint = navIconColor
                         )
+
                         "close" -> Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
                             tint = navIconColor
                         )
+
                         "menu" -> Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu",
                             tint = navIconColor
                         )
+
                         else -> Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Navigate",
@@ -1088,7 +1101,7 @@ class DefaultComponentFactory(
         val props = node.properties ?: emptyMap()
         var horizontalArrangement = Arrangement.Start
         val horizontalSetting = props["horizontalArrangement"] as? String ?: ""
-        when(horizontalSetting) {
+        when (horizontalSetting) {
             "end" -> horizontalArrangement = Arrangement.End
             "center" -> horizontalArrangement = Arrangement.Center
             "spaceBetween" -> horizontalArrangement = Arrangement.SpaceBetween
@@ -1123,6 +1136,11 @@ class DefaultComponentFactory(
     private fun CreateText(node: ComponentNode) {
         val props = node.properties ?: emptyMap()
         val text = props["text"] as? String ?: ""
+        val textColor = props["color"] as? String
+        val fontWeight = props["fontWeight"] as? String
+        val fontSize = props["fontSize"] as? Number
+        val textAlign = props["textAlign"] as? String
+
         val style = when (props["style"] as? String) {
             "headline1" -> MaterialTheme.typography.headlineLarge
             "headline2" -> MaterialTheme.typography.headlineMedium
@@ -1132,12 +1150,36 @@ class DefaultComponentFactory(
             else -> MaterialTheme.typography.bodyLarge
         }
 
-        Timber.tag("SSR_TEXT")
-            .d("Creating text component with text: '$text', style: ${props["style"]}")
+        val color = textColor?.let { parseColor(it) } ?: Color.Black
+
+        val weight = when (fontWeight?.lowercase()) {
+            "bold" -> FontWeight.Bold
+            "semibold" -> FontWeight.SemiBold
+            "medium" -> FontWeight.Medium
+            "light" -> FontWeight.Light
+            "thin" -> FontWeight.Thin
+            "normal" -> FontWeight.Normal
+            else -> null
+        }
+        val finalStyle = fontSize?.let { size ->
+            style.copy(fontSize = size.toInt().sp)
+        } ?: style
+
+        val alignment = when (textAlign?.lowercase()) {
+            "center" -> TextAlign.Center
+            "end", "right" -> TextAlign.End
+            "start", "left" -> TextAlign.Start
+            "justify" -> TextAlign.Justify
+            else -> TextAlign.Start
+        }
+
 
         Text(
             text = text,
-            style = style,
+            style = finalStyle,
+            color = color,
+            fontWeight = weight,
+            textAlign = alignment,
             modifier = createModifier(node.modifier)
         )
     }
@@ -1531,16 +1573,46 @@ class DefaultComponentFactory(
         val props = node.properties ?: emptyMap()
         val elevation = (props["elevation"] as? Number)?.toFloat() ?: 1f
         val backgroundColor = props["backgroundColor"] as? String
-        val bgColor = backgroundColor?.let { parseColor(it) } ?: MaterialTheme.colorScheme.surface
+        var baseModifier = createModifier(node.modifier)
+        val padding = (props["padding"] as? Number)?.toFloat() ?: 16.0f
+        val hasGradient = node.modifier?.gradient != null
 
-        Card(
-            modifier = createModifier(node.modifier),
-            elevation = CardDefaults.cardElevation(defaultElevation = elevation.dp),
-            colors = CardDefaults.cardColors(containerColor = bgColor)
-        ) {
-            node.children?.forEach { child ->
-                val childComponent = createComponent(child)
-                childComponent()
+        val bgColor = when {
+            backgroundColor != null -> parseColor(backgroundColor)
+            hasGradient -> Color.Transparent
+            else -> MaterialTheme.colorScheme.surface
+        }
+
+        val containerColor = if (hasGradient) Color.Transparent else bgColor
+
+        if (hasGradient) {
+            Card(
+                modifier = Modifier.fillMaxWidth().padding(padding.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = elevation.dp),
+                colors = CardDefaults.cardColors(containerColor = containerColor)
+            ) {
+                Box(
+                    modifier = baseModifier.clip(RoundedCornerShape(8.dp))
+                ) {
+                    Column {
+                        node.children?.forEach { child ->
+                            val childComponent = createComponent(child)
+                            childComponent()
+                        }
+                    }
+                }
+            }
+        } else {
+            Card(
+                modifier = baseModifier,
+                elevation = CardDefaults.cardElevation(defaultElevation = elevation.dp),
+                colors = CardDefaults.cardColors(containerColor = bgColor),
+            ) {
+                node.children?.forEach { child ->
+                    val childComponent = createComponent(child)
+                    childComponent()
+                }
             }
         }
     }
@@ -1704,9 +1776,28 @@ class DefaultComponentFactory(
     private fun createModifier(modifierConfig: ModifierConfig?): Modifier {
         var modifier: Modifier = Modifier
         modifierConfig?.let { config ->
-            config.padding?.let { padding ->
-                modifier = modifier.padding(padding.dp)
+            when {
+                config.paddingStart != null || config.paddingTop != null ||
+                        config.paddingEnd != null || config.paddingBottom != null -> {
+                    modifier = modifier.padding(
+                        start = (config.paddingStart ?: 0).dp,
+                        top = (config.paddingTop ?: 0).dp,
+                        end = (config.paddingEnd ?: 0).dp,
+                        bottom = (config.paddingBottom ?: 0).dp
+                    )
+                }
+                config.paddingHorizontal != null || config.paddingVertical != null -> {
+                    modifier = modifier.padding(
+                        horizontal = (config.paddingHorizontal ?: 0).dp,
+                        vertical = (config.paddingVertical ?: 0).dp
+                    )
+                }
+                // General padding
+                config.padding != null -> {
+                    modifier = modifier.padding(config.padding.dp)
+                }
             }
+
             if (config.fillMaxSize == true) {
                 modifier = modifier.fillMaxSize()
             }
@@ -1719,8 +1810,74 @@ class DefaultComponentFactory(
             config.height?.let { height ->
                 modifier = modifier.height(height.dp)
             }
+
+            config.gradient?.let { gradientConfig ->
+                modifier = modifier.background(createGradientBrush(gradientConfig))
+            }
         }
         return modifier
+    }
+
+    private fun createGradientBrush(gradientConfig: GradientConfig): Brush {
+        val colors = gradientConfig.colors.map { parseColor(it) }
+
+        return when (gradientConfig.type) {
+            "linear" -> {
+                val angle = gradientConfig.angle ?: 0f
+
+                if (gradientConfig.startX != null && gradientConfig.startY != null &&
+                    gradientConfig.endX != null && gradientConfig.endY != null) {
+                    Brush.linearGradient(
+                        colors = colors,
+                        start = Offset(gradientConfig.startX, gradientConfig.startY),
+                        end = Offset(gradientConfig.endX, gradientConfig.endY)
+                    )
+                } else {
+                    when (angle.toInt()) {
+                        0 -> Brush.horizontalGradient(colors)
+                        90 -> Brush.verticalGradient(colors)
+                        180 -> Brush.horizontalGradient(colors.reversed())
+                        270 -> Brush.verticalGradient(colors.reversed())
+                        135 -> Brush.linearGradient(
+                            colors = colors,
+                            start = Offset(0f, 0f),
+                            end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                        )
+                        45 -> Brush.linearGradient(
+                            colors = colors,
+                            start = Offset(0f, Float.POSITIVE_INFINITY),
+                            end = Offset(Float.POSITIVE_INFINITY, 0f)
+                        )
+                        else -> {
+                            // For any other angle, use trigonometry
+                            val angleInRadians = Math.toRadians(angle.toDouble())
+                            Brush.linearGradient(
+                                colors = colors,
+                                start = Offset(0f, 0f),
+                                end = Offset(
+                                    cos(angleInRadians).toFloat() * Float.POSITIVE_INFINITY,
+                                    sin(angleInRadians).toFloat() * Float.POSITIVE_INFINITY
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            "radial" -> {
+                Brush.radialGradient(
+                    colors = colors,
+                    center = Offset(0.5f, 0.5f),
+                    radius = Float.POSITIVE_INFINITY
+                )
+            }
+            "sweep" -> {
+                Brush.sweepGradient(
+                    colors = colors,
+                    center = Offset(0.5f, 0.5f)
+                )
+            }
+            else -> Brush.horizontalGradient(colors) // Default to left-to-right
+        }
     }
 
     private fun generateCacheKey(node: ComponentNode): String {

@@ -21,18 +21,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.*
+import androidx.core.graphics.toColorInt
 
 data class ChartDataPoint(
     val label: String,
     val value: Double,
     val color: String? = null,
-    val metadata: Map<String, Any>? = null
+    val metadata: Map<String, Any>? = null,
 )
 
 data class ChartSeries(
     val name: String,
     val data: List<ChartDataPoint>,
-    val color: String? = null
+    val color: String? = null,
 )
 
 data class ChartConfig(
@@ -45,14 +46,14 @@ data class ChartConfig(
     val animated: Boolean = true,
     val colors: List<String>? = null,
     val height: Int? = null,
-    val width: Int? = null
+    val width: Int? = null,
 )
 
 @Composable
 fun BarChart(
     data: List<ChartDataPoint>,
     config: ChartConfig = ChartConfig(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val defaultColors = listOf(
         "#3B82F6", "#EF4444", "#10B981", "#F59E0B",
@@ -109,7 +110,7 @@ fun LineChart(
     series: List<ChartSeries>,
     config: ChartConfig = ChartConfig(),
     modifier: Modifier = Modifier,
-    props: Map<String, Any>
+    props: Map<String, Any>,
 ) {
     val elevation = (props["elevation"] as? Number)?.toFloat() ?: 2f
     val backgroundColor = props["backgroundColor"] as? String
@@ -168,7 +169,7 @@ fun LineChart(
 fun PieChart(
     data: List<ChartDataPoint>,
     config: ChartConfig = ChartConfig(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val defaultColors = listOf(
         "#3B82F6", "#EF4444", "#10B981", "#F59E0B",
@@ -231,7 +232,7 @@ fun PieChart(
 fun BubbleChart(
     data: List<ChartDataPoint>,
     config: ChartConfig = ChartConfig(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val defaultColors = listOf(
         "#3B82F6", "#EF4444", "#10B981", "#F59E0B",
@@ -287,7 +288,7 @@ fun BubbleChart(
 fun RadarChart(
     data: List<ChartDataPoint>,
     config: ChartConfig = ChartConfig(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val defaultColors = listOf(
         "#3B82F6", "#EF4444", "#10B981", "#F59E0B",
@@ -343,7 +344,7 @@ fun RadarChart(
 private fun DrawScope.drawBarChart(
     data: List<ChartDataPoint>,
     config: ChartConfig,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     if (data.isEmpty()) return
 
@@ -402,7 +403,7 @@ private fun DrawScope.drawBarChart(
 private fun DrawScope.drawLineChart(
     series: List<ChartSeries>,
     config: ChartConfig,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     if (series.isEmpty() || series.all { it.data.isEmpty() }) return
 
@@ -468,7 +469,7 @@ private fun DrawScope.drawLineChart(
 private fun DrawScope.drawPieChart(
     data: List<ChartDataPoint>,
     config: ChartConfig,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     if (data.isEmpty()) return
 
@@ -534,7 +535,7 @@ private fun createTextPaint(color: Color, textSize: Float): Paint {
 private fun DrawScope.drawBubbleChart(
     data: List<ChartDataPoint>,
     config: ChartConfig,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     if (data.isEmpty()) return
 
@@ -599,7 +600,7 @@ private fun DrawScope.drawBubbleChart(
 private fun DrawScope.drawRadarChart(
     data: List<ChartDataPoint>,
     config: ChartConfig,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     if (data.isEmpty()) return
 
@@ -700,7 +701,7 @@ private fun DrawScope.drawRadarChart(
 @Composable
 private fun ChartLegend(
     data: List<ChartDataPoint>,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -733,7 +734,7 @@ private fun ChartLegend(
 @Composable
 private fun SeriesLegend(
     series: List<ChartSeries>,
-    defaultColors: List<String>
+    defaultColors: List<String>,
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -787,6 +788,47 @@ fun parseColor(colorString: String): Color {
             8 -> Color(colorLong) // Already includes alpha
             3 -> {
                 // Handle short hex format like #RGB -> #RRGGBB
+                val r = cleanColor[0]
+                val g = cleanColor[1]
+                val b = cleanColor[2]
+                val expandedColor = "$r$r$g$g$b$b"
+                Color(0xFF000000 or expandedColor.toLong(16))
+            }
+            else -> Color.Black
+        }
+    } catch (e: NumberFormatException) {
+        when (colorString.lowercase().trim()) {
+            "white" -> Color.White
+            "black" -> Color.Black
+            "red" -> Color.Red
+            "green" -> Color.Green
+            "blue" -> Color.Blue
+            "gray", "grey" -> Color.Gray
+            "yellow" -> Color.Yellow
+            "cyan" -> Color.Cyan
+            "magenta" -> Color.Magenta
+            "transparent" -> Color.Transparent
+            else -> Color.Black // Default fallback
+        }
+    }
+}
+
+fun parseColorV2(colorString: String): Color {
+    return try {
+        val cleanColor = colorString.removePrefix("#")
+        when (cleanColor.length) {
+            6 -> {
+                // Standard hex format #RRGGBB
+                val colorLong = cleanColor.toLong(16)
+                Color(0xFF000000 or colorLong)
+            }
+            8 -> {
+                // Hex with alpha #RRGGBBAA
+                val colorLong = cleanColor.toLong(16)
+                Color(colorLong)
+            }
+            3 -> {
+                // Short hex format #RGB -> #RRGGBB
                 val r = cleanColor[0]
                 val g = cleanColor[1]
                 val b = cleanColor[2]

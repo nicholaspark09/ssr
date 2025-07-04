@@ -57,11 +57,30 @@ data class ScreenLayout(
 
 data class ModifierConfig(
     val padding: Int? = null,
+    val paddingStart: Int? = null,
+    val paddingTop: Int? = null,
+    val paddingEnd: Int? = null,
+    val paddingBottom: Int? = null,
+    val paddingHorizontal: Int? = null,
+    val paddingVertical: Int? = null,
     val fillMaxSize: Boolean? = null,
     val fillMaxWidth: Boolean? = null,
     val width: Int? = null,
     val height: Int? = null,
     val weight: Float? = null,
+    val gradient: GradientConfig? = null
+)
+
+data class GradientConfig(
+    val type: String, // Only possible values are "linear", "radial", "sweep" (TODO July 4, 2025)
+    val colors: List<String>,
+    val angle: Float? = null, // (0-360 degrees)
+    val startX: Float? = null,
+    val startY: Float? = null,
+    val endX: Float? = null,
+    val endY: Float? = null,
+    val center: Pair<Float, Float>? = null, // For radial gradients
+    val radius: Float? = null
 )
 
 data class ActionConfig(

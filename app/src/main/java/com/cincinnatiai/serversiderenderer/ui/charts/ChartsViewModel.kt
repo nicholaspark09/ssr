@@ -3,7 +3,6 @@ package com.cincinnatiai.serversiderenderer.ui.charts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cincinnatiai.serversiderenderer.constants.chartsScreenJson
-import com.cincinnatiai.serversiderenderer.constants.homeScreenJson
 import com.cincinnatiai.serversiderenderer.constants.loadingScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
