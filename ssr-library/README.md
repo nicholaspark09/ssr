@@ -6,7 +6,7 @@ screens using JSON configuration.
 - This is a work in progress
 - You **may** use a backend to send back the json **or** you can host your json files locally
 
-## 📱 Quick Start
+## Quick Start
 
 ```kotlin
 val renderer = ServerSideRendererImpl()
@@ -17,7 +17,7 @@ renderer.RenderScreen(
 )
 ```
 
-## 🎯 Basic JSON Structure
+## Basic JSON Structure
 
 Every screen follows this basic structure:
 
@@ -46,7 +46,7 @@ Every screen follows this basic structure:
 }
 ```
 
-## 🧩 Core Components
+## Core Components
 
 ### Text Component
 
@@ -197,7 +197,7 @@ Every screen follows this basic structure:
 }
 ```
 
-## 🎨 Modifiers
+## Modifiers
 
 Common modifier properties:
 
@@ -220,7 +220,7 @@ Common modifier properties:
 - `width`/`height`: Fixed dimensions in dp
 - `weight`: Proportional sizing in Column/Row
 
-## 📜 Lists and Data
+## Lists and Data
 
 ### Static LazyColumn
 
@@ -291,7 +291,7 @@ Use `{{item.property}}` syntax to bind data from list items:
 - `{{item.user.name}}` - Nested property
 - `${{item.price}}` - With prefix/suffix
 
-## 🎭 Actions
+## Actions
 
 ### Navigation Action
 
@@ -323,7 +323,7 @@ Use `{{item.property}}` syntax to bind data from list items:
 }
 ```
 
-## 📺 Screen Examples
+## Screen Examples
 
 ### 1. Simple Home Screen
 
@@ -776,8 +776,8 @@ Use `{{item.property}}` syntax to bind data from list items:
 }
 ```
 
-## 🎨 Theming
-
+## Theming
+- This is still a TODO
 Add custom themes to your screens:
 
 ```json
@@ -797,7 +797,7 @@ Add custom themes to your screens:
 - Short hex: `#F00`, `#FFF`
 - Named: `red`, `white`, `black`, `blue`
 
-## 🏗️ App Bar
+## App Bar
 
 ### Centered App Bar
 
@@ -888,7 +888,7 @@ Use consistent padding and spacer values:
 - Medium: 16dp
 - Large: 24dp
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Add the library** to your project
 2. **Create a JSON screen** using the examples above
@@ -896,7 +896,7 @@ Use consistent padding and spacer values:
 4. **Handle actions** with custom `ActionHandler`
 5. **Test and iterate** with different layouts
 
-## 📚 Component Reference
+## Component Reference
 
 | Component     | Purpose            | Required Properties          |
 |---------------|--------------------|------------------------------|
@@ -909,5 +909,3 @@ Use consistent padding and spacer values:
 | `spacer`      | Add spacing        | `height` or `width`          |
 | `lazy_column` | Scrollable list    | `dataSource`, `itemTemplate` |
 | `top_app_bar` | App bar            | `title`                      |
-
-Happy building! 🎉
