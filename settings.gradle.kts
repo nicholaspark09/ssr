@@ -30,3 +30,4 @@ rootProject.name = "ServerSideRenderer"
 include(":app")
 include(":ssr-library")
 include(":common")
+include(":ssr-simple")

@@ -18,7 +18,7 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem("home", Icons.Default.Home, R.string.home),
     BottomNavItem("charts", Icons.Default.KeyboardArrowRight, R.string.charts),
-    BottomNavItem("profile", Icons.Default.Person, R.string.profile),
+    BottomNavItem("dashboard", Icons.Default.Person, R.string.profile),
     BottomNavItem("settings", Icons.Default.Settings, R.string.settings)
 )
 
@@ -26,6 +26,7 @@ fun getScreenTitle(route: String): Int {
     return when (route) {
         "home" -> R.string.home
         "charts" -> R.string.charts
+        "dashboard" -> R.string.dashboard
         "profile" -> R.string.profile
         "settings" -> R.string.settings
         else -> R.string.app_name

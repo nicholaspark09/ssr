@@ -1,0 +1,515 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Product Catalog"
+  },
+  "content": {
+    "type": "LazyColumn",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Box",
+        "modifier": {
+          "fillMaxWidth": true,
+          "backgroundColor": "#FF6F00",
+          "padding": 20,
+          "contentAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "horizontalAlignment": "center"
+            },
+            "children": [
+              {
+                "type": "Text",
+                "title": "Flash Sale!",
+                "textStyle": {
+                  "fontSize": 24,
+                  "fontWeight": "bold",
+                  "color": "#FFFFFF"
+                }
+              },
+              {
+                "type": "Text",
+                "description": "Up to 50% off on selected items",
+                "textStyle": {
+                  "fontSize": 16,
+                  "color": "#FFFFFF"
+                },
+                "modifier": {
+                  "paddingTop": 4
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingTop": 16,
+          "paddingBottom": 8,
+          "verticalAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Text",
+            "title": "Categories",
+            "textStyle": {
+              "fontSize": 20,
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "type": "Box",
+            "modifier": {
+              "fillMaxWidth": true,
+              "contentAlignment": "centerend"
+            },
+            "children": [
+              {
+                "type": "Button",
+                "label": "View All",
+                "action": "navigate:categories"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16,
+          "verticalAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Card",
+            "title": "Electronics",
+            "elevation": 3,
+            "backgroundColor": "#E3F2FD",
+            "modifier": {
+              "fillMaxWidth": true,
+              "paddingEnd": 8
+            }
+          },
+          {
+            "type": "Card",
+            "title": "Fashion",
+            "elevation": 3,
+            "backgroundColor": "#FCE4EC",
+            "modifier": {
+              "fillMaxWidth": true,
+              "paddingEnd": 8
+            }
+          },
+          {
+            "type": "Card",
+            "title": "Home",
+            "elevation": 3,
+            "backgroundColor": "#F1F8E9",
+            "modifier": {
+              "fillMaxWidth": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Featured Products",
+        "textStyle": {
+          "fontSize": 20,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Card",
+        "elevation": 6,
+        "backgroundColor": "#FFFFFF",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 12
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Box",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "backgroundColor": "#F5F5F5",
+                  "padding": 40,
+                  "contentAlignment": "center"
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "📱",
+                    "textStyle": {
+                      "fontSize": 48
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "padding": 12
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Premium Smartphone",
+                    "textStyle": {
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "Latest model with advanced features",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    },
+                    "modifier": {
+                      "paddingTop": 4,
+                      "paddingBottom": 8
+                    }
+                  },
+                  {
+                    "type": "Row",
+                    "modifier": {
+                      "fillMaxWidth": true,
+                      "verticalAlignment": "center"
+                    },
+                    "children": [
+                      {
+                        "type": "Text",
+                        "title": "$899.99",
+                        "textStyle": {
+                          "fontSize": 20,
+                          "fontWeight": "bold",
+                          "color": "#43A047"
+                        }
+                      },
+                      {
+                        "type": "Box",
+                        "modifier": {
+                          "fillMaxWidth": true,
+                          "contentAlignment": "centerend"
+                        },
+                        "children": [
+                          {
+                            "type": "Button",
+                            "label": "Add to Cart",
+                            "action": "navigate:add_to_cart"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "elevation": 6,
+        "backgroundColor": "#FFFFFF",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 12
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Box",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "backgroundColor": "#F5F5F5",
+                  "padding": 40,
+                  "contentAlignment": "center"
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "⌚",
+                    "textStyle": {
+                      "fontSize": 48
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "padding": 12
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Smart Watch Pro",
+                    "textStyle": {
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "Track your fitness and stay connected",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    },
+                    "modifier": {
+                      "paddingTop": 4,
+                      "paddingBottom": 8
+                    }
+                  },
+                  {
+                    "type": "Row",
+                    "modifier": {
+                      "fillMaxWidth": true,
+                      "verticalAlignment": "center"
+                    },
+                    "children": [
+                      {
+                        "type": "Column",
+                        "children": [
+                          {
+                            "type": "Text",
+                            "title": "$299.99",
+                            "textStyle": {
+                              "fontSize": 20,
+                              "fontWeight": "bold",
+                              "color": "#43A047"
+                            }
+                          },
+                          {
+                            "type": "Text",
+                            "description": "Was $399.99",
+                            "textStyle": {
+                              "fontSize": 12,
+                              "color": "#E53935"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "Box",
+                        "modifier": {
+                          "fillMaxWidth": true,
+                          "contentAlignment": "centerend"
+                        },
+                        "children": [
+                          {
+                            "type": "Button",
+                            "label": "Add to Cart",
+                            "action": "navigate:add_to_cart"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "elevation": 6,
+        "backgroundColor": "#FFFFFF",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 12
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Box",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "backgroundColor": "#F5F5F5",
+                  "padding": 40,
+                  "contentAlignment": "center"
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "🎧",
+                    "textStyle": {
+                      "fontSize": 48
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "fillMaxWidth": true,
+                  "padding": 12
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Wireless Headphones",
+                    "textStyle": {
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "Noise cancelling with 30-hour battery",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    },
+                    "modifier": {
+                      "paddingTop": 4,
+                      "paddingBottom": 8
+                    }
+                  },
+                  {
+                    "type": "Row",
+                    "modifier": {
+                      "fillMaxWidth": true,
+                      "verticalAlignment": "center"
+                    },
+                    "children": [
+                      {
+                        "type": "Text",
+                        "title": "$199.99",
+                        "textStyle": {
+                          "fontSize": 20,
+                          "fontWeight": "bold",
+                          "color": "#43A047"
+                        }
+                      },
+                      {
+                        "type": "Box",
+                        "modifier": {
+                          "fillMaxWidth": true,
+                          "contentAlignment": "centerend"
+                        },
+                        "children": [
+                          {
+                            "type": "Button",
+                            "label": "Add to Cart",
+                            "action": "navigate:add_to_cart"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "fillMaxWidth": true,
+          "backgroundColor": "#E8EAF6",
+          "padding": 16,
+          "verticalAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Text",
+                "title": "Free Shipping",
+                "textStyle": {
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                  "color": "#3F51B5"
+                }
+              },
+              {
+                "type": "Text",
+                "description": "On orders over $50",
+                "textStyle": {
+                  "fontSize": 12,
+                  "color": "#5C6BC0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Box",
+        "modifier": {
+          "fillMaxWidth": true,
+          "padding": 24,
+          "contentAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "horizontalAlignment": "center"
+            },
+            "children": [
+              {
+                "type": "Button",
+                "label": "Load More Products",
+                "action": "navigate:load_more"
+              },
+              {
+                "type": "Text",
+                "description": "Showing 3 of 127 products",
+                "textStyle": {
+                  "fontSize": 12,
+                  "color": "#9E9E9E"
+                },
+                "modifier": {
+                  "paddingTop": 8
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

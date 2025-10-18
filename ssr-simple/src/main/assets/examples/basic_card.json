@@ -1,0 +1,39 @@
+{
+  "type": "Column",
+  "modifier": {
+    "padding": 16,
+    "fillMaxWidth": true
+  },
+  "children": [
+    {
+      "type": "Card",
+      "title": "Basic Card",
+      "description": "This is a simple card with default elevation (4dp)",
+      "modifier": {
+        "fillMaxWidth": true,
+        "padding": 8
+      }
+    },
+    {
+      "type": "Card",
+      "title": "Elevated Card",
+      "description": "This card has custom elevation of 12dp",
+      "elevation": 12,
+      "backgroundColor": "#E3F2FD",
+      "modifier": {
+        "fillMaxWidth": true,
+        "padding": 8
+      }
+    },
+    {
+      "type": "Card",
+      "title": "Flat Card",
+      "description": "This card has no elevation (0dp)",
+      "elevation": 0,
+      "modifier": {
+        "fillMaxWidth": true,
+        "padding": 8
+      }
+    }
+  ]
+}

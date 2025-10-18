@@ -1,0 +1,96 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "SSR Demo"
+  },
+  "content": {
+    "type": "LazyColumn",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Card",
+        "title": "Welcome",
+        "description": "This is a complete example showcasing various SSR-Simple features",
+        "elevation": 8,
+        "backgroundColor": "#E3F2FD",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        }
+      },
+      {
+        "type": "Text",
+        "title": "Aligned Content",
+        "textStyle": {
+          "fontSize": 20,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingBottom": 8
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "fillMaxWidth": true,
+          "backgroundColor": "#FFF3E0",
+          "padding": 12,
+          "verticalAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Text",
+            "title": "Item 1",
+            "textStyle": {
+              "fontSize": 14
+            }
+          },
+          {
+            "type": "Box",
+            "modifier": {
+              "fillMaxWidth": true,
+              "contentAlignment": "centerend"
+            },
+            "children": [
+              {
+                "type": "Button",
+                "label": "Action",
+                "action": "navigate:details"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Column",
+        "modifier": {
+          "fillMaxWidth": true,
+          "backgroundColor": "#F3E5F5",
+          "padding": 16,
+          "horizontalAlignment": "center"
+        },
+        "children": [
+          {
+            "type": "Text",
+            "title": "Centered Column",
+            "textStyle": {
+              "fontSize": 16,
+              "fontWeight": "medium"
+            }
+          },
+          {
+            "type": "Text",
+            "description": "All content is centered horizontally",
+            "textStyle": {
+              "fontSize": 12
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

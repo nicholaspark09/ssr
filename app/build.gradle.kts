@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.gson.core)
     implementation(libs.coil.compose)
     implementation(project(":ssr-library"))
+    implementation(project(":ssr-simple"))
 //    implementation("com.cincinnatiai:ssr-library:0.0.12")
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)

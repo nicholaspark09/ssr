@@ -1,0 +1,91 @@
+{
+  "type": "Column",
+  "modifier": {
+    "padding": 16,
+    "fillMaxWidth": true
+  },
+  "children": [
+    {
+      "type": "Text",
+      "title": "Row Alignment Examples"
+    },
+    {
+      "type": "Row",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#FFEBEE",
+        "padding": 16,
+        "verticalAlignment": "top"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Top",
+          "textStyle": {
+            "fontSize": 12
+          }
+        },
+        {
+          "type": "Text",
+          "title": "Aligned",
+          "textStyle": {
+            "fontSize": 20,
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Row",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E8F5E9",
+        "padding": 16,
+        "verticalAlignment": "center"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Center",
+          "textStyle": {
+            "fontSize": 12
+          }
+        },
+        {
+          "type": "Text",
+          "title": "Aligned",
+          "textStyle": {
+            "fontSize": 20,
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Row",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E3F2FD",
+        "padding": 16,
+        "verticalAlignment": "bottom"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Bottom",
+          "textStyle": {
+            "fontSize": 12
+          }
+        },
+        {
+          "type": "Text",
+          "title": "Aligned",
+          "textStyle": {
+            "fontSize": 20,
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    }
+  ]
+}

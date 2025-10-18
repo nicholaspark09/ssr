@@ -1,0 +1,67 @@
+{
+  "type": "Column",
+  "modifier": {
+    "padding": 16,
+    "fillMaxWidth": true
+  },
+  "children": [
+    {
+      "type": "Text",
+      "title": "Column Alignment Examples"
+    },
+    {
+      "type": "Column",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#FFEBEE",
+        "padding": 16,
+        "horizontalAlignment": "start"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Start Aligned",
+          "textStyle": {
+            "fontSize": 14
+          }
+        }
+      ]
+    },
+    {
+      "type": "Column",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E8F5E9",
+        "padding": 16,
+        "horizontalAlignment": "center"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Center Aligned",
+          "textStyle": {
+            "fontSize": 14
+          }
+        }
+      ]
+    },
+    {
+      "type": "Column",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E3F2FD",
+        "padding": 16,
+        "horizontalAlignment": "end"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "End Aligned",
+          "textStyle": {
+            "fontSize": 14
+          }
+        }
+      ]
+    }
+  ]
+}

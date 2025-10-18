@@ -1,0 +1,68 @@
+{
+  "type": "Column",
+  "modifier": {
+    "padding": 16,
+    "fillMaxSize": true
+  },
+  "children": [
+    {
+      "type": "Text",
+      "title": "Box Content Alignment Examples"
+    },
+    {
+      "type": "Box",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#FFEBEE",
+        "padding": 32,
+        "contentAlignment": "center"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Center",
+          "textStyle": {
+            "fontSize": 16,
+            "fontWeight": "bold"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Box",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E8F5E9",
+        "padding": 32,
+        "contentAlignment": "topstart"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Top Start",
+          "textStyle": {
+            "fontSize": 14
+          }
+        }
+      ]
+    },
+    {
+      "type": "Box",
+      "modifier": {
+        "fillMaxWidth": true,
+        "backgroundColor": "#E3F2FD",
+        "padding": 32,
+        "contentAlignment": "bottomend"
+      },
+      "children": [
+        {
+          "type": "Text",
+          "title": "Bottom End",
+          "textStyle": {
+            "fontSize": 14
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,7 @@ package com.cincinnatiai.serversiderenderer.ui.charts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cincinnatiai.serversiderenderer.constants.chartsScreenJson
+import com.cincinnatiai.serversiderenderer.constants.dashboardJson
 import com.cincinnatiai.serversiderenderer.constants.loadingScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,6 +32,6 @@ class ChartsViewModel : ViewModel() {
     // This is mocked; please use your own backend as this is just an example
     private suspend fun fetchScreenFromBackend(): String {
         delay(900)
-        return chartsScreenJson
+        return dashboardJson
     }
 }

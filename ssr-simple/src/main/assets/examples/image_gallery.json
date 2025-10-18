@@ -1,0 +1,337 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Image Gallery"
+  },
+  "content": {
+    "type": "LazyColumn",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "Basic Images",
+        "textStyle": {
+          "fontSize": 20,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Card",
+        "elevation": 4,
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Image",
+                "imageUrl": "https://picsum.photos/400/200",
+                "contentDescription": "Random landscape image",
+                "modifier": {
+                  "fillMaxWidth": true
+                }
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "padding": 16
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Full Width Image",
+                    "textStyle": {
+                      "fontSize": 16,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "This image fills the card width",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "elevation": 4,
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Image",
+                "imageUrl": "https://picsum.photos/400/300",
+                "imageHeight": 200,
+                "contentDescription": "Fixed height image",
+                "modifier": {
+                  "fillMaxWidth": true
+                }
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "padding": 16
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Fixed Height Image",
+                    "textStyle": {
+                      "fontSize": 16,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "This image has a fixed height of 200dp",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Image Grid",
+        "textStyle": {
+          "fontSize": 20,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingTop": 8,
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Image",
+            "imageUrl": "https://picsum.photos/200/200?random=1",
+            "imageWidth": 100,
+            "imageHeight": 100,
+            "contentDescription": "Square image 1",
+            "modifier": {
+              "paddingEnd": 8
+            }
+          },
+          {
+            "type": "Image",
+            "imageUrl": "https://picsum.photos/200/200?random=2",
+            "imageWidth": 100,
+            "imageHeight": 100,
+            "contentDescription": "Square image 2",
+            "modifier": {
+              "paddingEnd": 8
+            }
+          },
+          {
+            "type": "Image",
+            "imageUrl": "https://picsum.photos/200/200?random=3",
+            "imageWidth": 100,
+            "imageHeight": 100,
+            "contentDescription": "Square image 3"
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Profile Card with Image",
+        "textStyle": {
+          "fontSize": 20,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingTop": 8,
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Card",
+        "elevation": 6,
+        "backgroundColor": "#FFFFFF",
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Row",
+            "modifier": {
+              "fillMaxWidth": true,
+              "padding": 16,
+              "verticalAlignment": "center"
+            },
+            "children": [
+              {
+                "type": "Image",
+                "imageUrl": "https://picsum.photos/100/100?random=4",
+                "imageWidth": 60,
+                "imageHeight": 60,
+                "contentDescription": "Profile picture",
+                "modifier": {
+                  "paddingEnd": 16
+                }
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "fillMaxWidth": true
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Jane Doe",
+                    "textStyle": {
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "Product Designer",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "San Francisco, CA",
+                    "textStyle": {
+                      "fontSize": 12,
+                      "color": "#9E9E9E"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "elevation": 4,
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Column",
+            "modifier": {
+              "fillMaxWidth": true
+            },
+            "children": [
+              {
+                "type": "Image",
+                "imageUrl": "https://picsum.photos/400/250?random=5",
+                "contentDescription": "Product image",
+                "modifier": {
+                  "fillMaxWidth": true
+                }
+              },
+              {
+                "type": "Column",
+                "modifier": {
+                  "padding": 16
+                },
+                "children": [
+                  {
+                    "type": "Text",
+                    "title": "Premium Product",
+                    "textStyle": {
+                      "fontSize": 18,
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "type": "Text",
+                    "description": "High quality product with excellent features",
+                    "textStyle": {
+                      "fontSize": 14,
+                      "color": "#757575"
+                    },
+                    "modifier": {
+                      "paddingTop": 4,
+                      "paddingBottom": 12
+                    }
+                  },
+                  {
+                    "type": "Row",
+                    "modifier": {
+                      "fillMaxWidth": true,
+                      "verticalAlignment": "center"
+                    },
+                    "children": [
+                      {
+                        "type": "Text",
+                        "title": "$299.99",
+                        "textStyle": {
+                          "fontSize": 20,
+                          "fontWeight": "bold",
+                          "color": "#43A047"
+                        }
+                      },
+                      {
+                        "type": "Box",
+                        "modifier": {
+                          "fillMaxWidth": true,
+                          "contentAlignment": "centerend"
+                        },
+                        "children": [
+                          {
+                            "type": "Button",
+                            "label": "Buy Now",
+                            "action": "navigate:buy"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
