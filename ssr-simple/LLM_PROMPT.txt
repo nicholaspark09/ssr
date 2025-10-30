@@ -11,6 +11,7 @@ AVAILABLE COMPONENTS:
 - Text: Display text (title OR description, textStyle)
 - Button: Interactive (label, action)
 - Image: Async image loading (imageUrl, imageWidth, imageHeight, contentDescription)
+- Table: Data table (columns, tableData, showBorders, headerBackgroundColor, rowAction)
 
 MODIFIER PROPERTIES:
 {
@@ -83,4 +84,27 @@ Horizontal Stats:
   ]
 }
 
-When user describes a UI, generate valid JSON using these components. Include visual hierarchy with elevation, appropriate padding, and colors.
+Data Table:
+{
+  "type": "Table",
+  "showBorders": true,
+  "headerBackgroundColor": "#1976D2",
+  "columns": [
+    {"header": "Name", "weight": 2.0, "horizontalAlignment": "start", "headerStyle": {"color": "#FFFFFF"}},
+    {"header": "Status", "weight": 1.0, "horizontalAlignment": "center", "headerStyle": {"color": "#FFFFFF"}}
+  ],
+  "tableData": [
+    [
+      {"text": "Alice"},
+      {"text": "Active", "backgroundColor": "#4CAF50", "textStyle": {"color": "#FFFFFF", "fontWeight": "bold"}}
+    ]
+  ]
+}
+
+TABLE STRUCTURE:
+- columns: Array of {header, weight (1.0, 2.0, etc), horizontalAlignment (start|center|end), headerStyle, textStyle}
+- tableData: Array of arrays of {text, backgroundColor, textStyle, action}
+- Use weight for proportional column widths (e.g., 2.0 = twice as wide as 1.0)
+- Add backgroundColor to cells for status indicators (green=#4CAF50, orange=#FF9800, red=#F44336)
+
+When user describes a UI, generate valid JSON using these components. Include visual hierarchy with elevation, appropriate padding, and colors. Use Table for structured data like reports, directories, or catalogs.

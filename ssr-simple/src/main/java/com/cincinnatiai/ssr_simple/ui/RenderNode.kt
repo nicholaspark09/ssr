@@ -17,6 +17,10 @@ fun RenderNode(node: NodeModel, onAction: (String) -> Unit = {}) {
         "Text" -> RenderText(node)
         "Button" -> RenderButton(node, onAction)
         "Image" -> RenderImage(node)
+        "Table" -> RenderTable(node, onAction)
+        "Spacer" -> RenderSpacer(node)
+        "VideoItem" -> RenderVideoItem(node, onAction)
+        "HorizontalPager" -> RenderHorizontalPager(node, onAction)
         else -> Text("Unknown type: ${node.type}")
     }
 }

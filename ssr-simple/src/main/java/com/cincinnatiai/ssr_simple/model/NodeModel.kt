@@ -17,5 +17,15 @@ data class NodeModel(
     val topBar: NodeModel? = null,
     val floatingActionButton: NodeModel? = null,
     val content: NodeModel? = null,
-    val children: List<NodeModel>? = null
+    val children: List<NodeModel>? = null,
+    // Button-specific properties
+    val buttonVariant: String? = null, // "filled", "outlined", "text" (default: "filled")
+    // Table-specific properties
+    val columns: List<TableColumnModel>? = null,
+    val tableData: List<List<TableCellModel>>? = null,
+    val showBorders: Boolean? = null,
+    val headerBackgroundColor: String? = null,
+    val rowAction: String? = null, // Action when entire row is clicked
+    val roundedCorners: Float? = null, // Rounded corner radius in dp for tables
+    val useLazyColumn: Boolean? = null // Use LazyColumn for table rows (default: true). Set to false when table is in a scrollable parent
 )

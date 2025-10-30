@@ -17,6 +17,19 @@ Every UI element is represented by a `NodeModel` in JSON with these key properti
 
 ## Available Components
 
+**Component Summary:**
+1. Scaffold - Full-screen layout
+2. TopAppBar - App bar with title
+3. Column - Vertical layout
+4. Row - Horizontal layout
+5. Box - Stacked layout
+6. LazyColumn - Scrollable list
+7. Card - Material card
+8. Text - Text display
+9. Button - Interactive button
+10. Image - Async image loading
+11. Table - Data table with headers and styling
+
 ### 1. Scaffold
 Full-screen layout with top bar and content area.
 
@@ -313,6 +326,218 @@ Async image loading from URLs with Coil.
 }
 ```
 
+### 11. Table
+Display structured tabular data with customizable headers, columns, and cell styling.
+
+**Properties:**
+- `columns`: Array of TableColumnModel - Defines column headers and properties (required)
+- `tableData`: Array of arrays of TableCellModel - The data rows (required)
+- `showBorders`: Boolean - Show borders around cells (default: false)
+- `headerBackgroundColor`: String - Hex color for header row (default: primaryContainer)
+- `rowAction`: String - Action identifier when entire row is clicked (optional)
+- `modifier`: Standard modifier properties
+
+**TableColumnModel Properties:**
+- `header`: String - Column header text (required)
+- `weight`: Number - Column width weight for flexible sizing (e.g., 1.0, 2.0)
+- `width`: Number - Fixed column width in dp (overrides weight)
+- `horizontalAlignment`: String - "start" | "center" | "end"
+- `textStyle`: TextStyleModel - Style for cells in this column
+- `headerStyle`: TextStyleModel - Style for the header cell
+
+**TableCellModel Properties:**
+- `text`: String - Cell text content (required)
+- `textStyle`: TextStyleModel - Override column/table style for this cell
+- `backgroundColor`: String - Hex color for cell background
+- `action`: String - Action identifier when this cell is clicked
+- `modifier`: ModifierModel - Additional styling for the cell
+
+**Simple Table Example:**
+```json
+{
+  "type": "Table",
+  "showBorders": true,
+  "headerBackgroundColor": "#1976D2",
+  "columns": [
+    {
+      "header": "Name",
+      "weight": 2.0,
+      "horizontalAlignment": "start",
+      "headerStyle": {
+        "color": "#FFFFFF",
+        "fontSize": 16
+      }
+    },
+    {
+      "header": "Status",
+      "weight": 1.0,
+      "horizontalAlignment": "center"
+    }
+  ],
+  "tableData": [
+    [
+      {
+        "text": "Alice Johnson"
+      },
+      {
+        "text": "Active",
+        "backgroundColor": "#4CAF50",
+        "textStyle": {
+          "color": "#FFFFFF",
+          "fontWeight": "bold"
+        }
+      }
+    ],
+    [
+      {
+        "text": "Bob Smith"
+      },
+      {
+        "text": "Pending",
+        "backgroundColor": "#FF9800",
+        "textStyle": {
+          "color": "#FFFFFF",
+          "fontWeight": "bold"
+        }
+      }
+    ]
+  ]
+}
+```
+
+**Advanced Table with Actions Example:**
+```json
+{
+  "type": "Table",
+  "showBorders": true,
+  "headerBackgroundColor": "#6200EE",
+  "rowAction": "row_clicked",
+  "modifier": {
+    "fillMaxWidth": true,
+    "padding": 16
+  },
+  "columns": [
+    {
+      "header": "Product",
+      "weight": 2.0,
+      "horizontalAlignment": "start"
+    },
+    {
+      "header": "Price",
+      "weight": 1.0,
+      "horizontalAlignment": "end",
+      "textStyle": {
+        "fontWeight": "bold",
+        "color": "#2E7D32"
+      }
+    },
+    {
+      "header": "Action",
+      "weight": 1.0,
+      "horizontalAlignment": "center"
+    }
+  ],
+  "tableData": [
+    [
+      {
+        "text": "Laptop Pro"
+      },
+      {
+        "text": "$1,299"
+      },
+      {
+        "text": "Buy",
+        "action": "buy_laptop",
+        "backgroundColor": "#2196F3",
+        "textStyle": {
+          "color": "#FFFFFF",
+          "fontWeight": "bold"
+        }
+      }
+    ]
+  ]
+}
+```
+
+**Table Design Tips:**
+- Use `weight` for flexible columns that resize proportionally (e.g., 1.0, 2.0, 1.5)
+- Use `width` (in dp) for fixed-width columns like action buttons
+- Set `showBorders: true` for clearer data separation
+- Use `backgroundColor` on cells to highlight status (green for success, red for errors, etc.)
+- Add `rowAction` for list-style tables where clicking the row navigates to details
+- Add cell-level `action` for interactive elements like buttons within cells
+- Use `headerStyle` with white text color when using dark header backgrounds
+- Align text appropriately: start for names/text, end for numbers, center for status/actions
+
+**Table in Scaffold Example:**
+```json
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Sales Report"
+  },
+  "content": {
+    "type": "Column",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "Q4 Results",
+        "textStyle": {
+          "fontSize": 24,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingBottom": 16
+        }
+      },
+      {
+        "type": "Table",
+        "showBorders": true,
+        "headerBackgroundColor": "#1976D2",
+        "columns": [
+          {
+            "header": "Region",
+            "weight": 1.5,
+            "horizontalAlignment": "start",
+            "headerStyle": {
+              "color": "#FFFFFF"
+            }
+          },
+          {
+            "header": "Revenue",
+            "weight": 1.0,
+            "horizontalAlignment": "end",
+            "headerStyle": {
+              "color": "#FFFFFF"
+            }
+          }
+        ],
+        "tableData": [
+          [
+            {
+              "text": "North America"
+            },
+            {
+              "text": "$2.4M",
+              "backgroundColor": "#E8F5E9",
+              "textStyle": {
+                "fontWeight": "bold",
+                "color": "#2E7D32"
+              }
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Modifier Properties
 
 The `modifier` object controls layout and styling:
@@ -557,11 +782,19 @@ This design includes:
 Ask yourself:
 1. Is this a full screen? → Use Scaffold with LazyColumn content
 2. Does it need to scroll? → Use LazyColumn
-3. Should items be horizontal? → Use Row
-4. Should items be vertical? → Use Column
-5. Do items overlap/stack? → Use Box
-6. Does it need visual separation? → Use Cards with elevation
-7. Should content be centered? → Use appropriate alignment in modifier
-8. Are there interactive elements? → Add Buttons with actions
+3. Is this tabular data with rows/columns? → Use Table
+4. Should items be horizontal? → Use Row
+5. Should items be vertical? → Use Column
+6. Do items overlap/stack? → Use Box
+7. Does it need visual separation? → Use Cards with elevation
+8. Should content be centered? → Use appropriate alignment in modifier
+9. Are there interactive elements? → Add Buttons with actions or cell/row actions in Tables
+
+**When to use Table:**
+- Displaying structured data (reports, lists, inventories)
+- Comparing data across categories
+- Showing financial data, analytics, or statistics
+- Employee directories, product catalogs, order lists
+- Any grid-like data presentation with headers
 
 Then generate the JSON accordingly, ensuring all properties are valid and colors are in hex format.

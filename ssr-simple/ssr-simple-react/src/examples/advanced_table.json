@@ -1,0 +1,206 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Sales Dashboard"
+  },
+  "content": {
+    "type": "Column",
+    "modifier": {
+      "padding": 16,
+      "fillMaxSize": true
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "Q4 Sales Report",
+        "textStyle": {
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "color": "#1976D2"
+        },
+        "modifier": {
+          "paddingBottom": 8
+        }
+      },
+      {
+        "type": "Text",
+        "description": "Click on any row to view details",
+        "textStyle": {
+          "fontSize": 14,
+          "color": "#666666"
+        },
+        "modifier": {
+          "paddingBottom": 16
+        }
+      },
+      {
+        "type": "Table",
+        "showBorders": true,
+        "headerBackgroundColor": "#1976D2",
+        "rowAction": "row_clicked",
+        "modifier": {
+          "fillMaxWidth": true
+        },
+        "columns": [
+          {
+            "header": "Product",
+            "weight": 2.0,
+            "horizontalAlignment": "start",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "header": "Region",
+            "weight": 1.5,
+            "horizontalAlignment": "center",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "header": "Units Sold",
+            "weight": 1.0,
+            "horizontalAlignment": "end",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            },
+            "textStyle": {
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "header": "Revenue",
+            "weight": 1.5,
+            "horizontalAlignment": "end",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            },
+            "textStyle": {
+              "fontSize": 14,
+              "fontWeight": "bold",
+              "color": "#2E7D32"
+            }
+          },
+          {
+            "header": "Action",
+            "weight": 1.0,
+            "horizontalAlignment": "center",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          }
+        ],
+        "tableData": [
+          [
+            {
+              "text": "Laptop Pro X1"
+            },
+            {
+              "text": "North America"
+            },
+            {
+              "text": "1,234"
+            },
+            {
+              "text": "$2,468,000",
+              "backgroundColor": "#E8F5E9"
+            },
+            {
+              "text": "View",
+              "action": "view_laptop_x1",
+              "backgroundColor": "#2196F3",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Smartphone Z5"
+            },
+            {
+              "text": "Europe"
+            },
+            {
+              "text": "5,678"
+            },
+            {
+              "text": "$3,406,800",
+              "backgroundColor": "#E8F5E9"
+            },
+            {
+              "text": "View",
+              "action": "view_phone_z5",
+              "backgroundColor": "#2196F3",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Tablet Ultra"
+            },
+            {
+              "text": "Asia Pacific"
+            },
+            {
+              "text": "3,456"
+            },
+            {
+              "text": "$1,728,000",
+              "backgroundColor": "#E8F5E9"
+            },
+            {
+              "text": "View",
+              "action": "view_tablet_ultra",
+              "backgroundColor": "#2196F3",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Smartwatch S2"
+            },
+            {
+              "text": "South America"
+            },
+            {
+              "text": "2,345"
+            },
+            {
+              "text": "$469,000",
+              "backgroundColor": "#FFF9C4"
+            },
+            {
+              "text": "View",
+              "action": "view_watch_s2",
+              "backgroundColor": "#2196F3",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}

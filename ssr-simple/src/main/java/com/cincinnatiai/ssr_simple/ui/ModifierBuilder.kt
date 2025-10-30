@@ -3,16 +3,20 @@ package com.cincinnatiai.ssr_simple.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.cincinnatiai.ssr_simple.model.ModifierModel
 import androidx.core.graphics.toColorInt
+import com.cincinnatiai.ssr_simple.model.ModifierModel
 
 fun buildModifier(model: ModifierModel?): Modifier {
     var modifier: Modifier = Modifier
 
+    if (model?.height != null) modifier = modifier.height(model.height.dp)
+    if (model?.width != null) modifier = modifier.width(model.width.dp)
     if (model?.fillMaxSize == true) modifier = modifier.fillMaxSize()
     if (model?.fillMaxWidth == true) modifier = modifier.fillMaxWidth()
 
@@ -37,6 +41,5 @@ fun buildModifier(model: ModifierModel?): Modifier {
             bottom = (model?.paddingBottom ?: model?.padding ?: 0).dp
         )
     }
-
     return modifier
 }

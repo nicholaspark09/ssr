@@ -1,0 +1,40 @@
+{
+  "name": "ssr-simple-react",
+  "version": "1.0.0",
+  "description": "A lightweight React library that converts JSON into native Material-UI components",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "ssr",
+    "server-side-rendering",
+    "material-ui",
+    "json",
+    "dynamic-ui"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@mui/material": "^5.0.0",
+    "@mui/icons-material": "^5.0.0",
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ]
+}

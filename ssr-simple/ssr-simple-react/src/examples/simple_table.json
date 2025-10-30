@@ -1,0 +1,129 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Simple Table Example"
+  },
+  "content": {
+    "type": "Column",
+    "modifier": {
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "Employee Directory",
+        "textStyle": {
+          "fontSize": 24,
+          "fontWeight": "bold"
+        },
+        "modifier": {
+          "paddingBottom": 16
+        }
+      },
+      {
+        "type": "Table",
+        "showBorders": true,
+        "headerBackgroundColor": "#6200EE",
+        "columns": [
+          {
+            "header": "Name",
+            "weight": 2.0,
+            "horizontalAlignment": "start",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "header": "Role",
+            "weight": 1.5,
+            "horizontalAlignment": "start",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          },
+          {
+            "header": "Status",
+            "weight": 1.0,
+            "horizontalAlignment": "center",
+            "headerStyle": {
+              "color": "#FFFFFF",
+              "fontSize": 16,
+              "fontWeight": "bold"
+            }
+          }
+        ],
+        "tableData": [
+          [
+            {
+              "text": "Alice Johnson"
+            },
+            {
+              "text": "Engineer"
+            },
+            {
+              "text": "Active",
+              "backgroundColor": "#4CAF50",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Bob Smith"
+            },
+            {
+              "text": "Designer"
+            },
+            {
+              "text": "Active",
+              "backgroundColor": "#4CAF50",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "Carol Williams"
+            },
+            {
+              "text": "Manager"
+            },
+            {
+              "text": "Away",
+              "backgroundColor": "#FF9800",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ],
+          [
+            {
+              "text": "David Brown"
+            },
+            {
+              "text": "Engineer"
+            },
+            {
+              "text": "Active",
+              "backgroundColor": "#4CAF50",
+              "textStyle": {
+                "color": "#FFFFFF",
+                "fontWeight": "bold"
+              }
+            }
+          ]
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,449 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Chef's Assistant - Month 6"
+  },
+  "content": {
+    "type": "LazyColumn",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "6 Month Feeding Guide",
+        "textStyle": {
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "color": "#FF6B6B"
+        },
+        "modifier": {
+          "paddingBottom": 8
+        }
+      },
+      {
+        "type": "Text",
+        "description": "Starting solids is an exciting milestone! Here's what to expect.",
+        "textStyle": {
+          "fontSize": 14,
+          "color": "#666666"
+        },
+        "modifier": {
+          "paddingBottom": 24
+        }
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#E8F5E9",
+        "elevation": 2,
+        "modifier": {
+          "paddingBottom": 16,
+          "fillMaxWidth": true
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "🍼 Milk Feeding",
+              "textStyle": {
+                "fontSize": 20,
+                "fontWeight": "bold",
+                "color": "#2E7D32"
+              },
+              "modifier": {
+                "paddingBottom": 12
+              }
+            },
+            {
+              "type": "Row",
+              "children": [
+                {
+                  "type": "Column",
+                  "modifier": {
+                    "weight": 1
+                  },
+                  "children": [
+                    {
+                      "type": "Text",
+                      "title": "Breastfeeding",
+                      "textStyle": {
+                        "fontSize": 16,
+                        "fontWeight": "bold"
+                      },
+                      "modifier": {
+                        "paddingBottom": 4
+                      }
+                    },
+                    {
+                      "type": "Text",
+                      "description": "6-8 feeds per day",
+                      "textStyle": {
+                        "fontSize": 14
+                      }
+                    },
+                    {
+                      "type": "Text",
+                      "description": "Continue on demand",
+                      "textStyle": {
+                        "fontSize": 12,
+                        "color": "#666666"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "Spacer",
+                  "modifier": {
+                    "width": 16
+                  }
+                },
+                {
+                  "type": "Column",
+                  "modifier": {
+                    "weight": 1
+                  },
+                  "children": [
+                    {
+                      "type": "Text",
+                      "title": "Formula",
+                      "textStyle": {
+                        "fontSize": 16,
+                        "fontWeight": "bold"
+                      },
+                      "modifier": {
+                        "paddingBottom": 4
+                      }
+                    },
+                    {
+                      "type": "Text",
+                      "description": "6-8 oz per feed",
+                      "textStyle": {
+                        "fontSize": 14
+                      }
+                    },
+                    {
+                      "type": "Text",
+                      "description": "3-5 feeds/day (24-32 oz total)",
+                      "textStyle": {
+                        "fontSize": 12,
+                        "color": "#666666"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#FFF3E0",
+        "elevation": 2,
+        "modifier": {
+          "paddingBottom": 16,
+          "fillMaxWidth": true
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "🥄 Starting Solids!",
+              "textStyle": {
+                "fontSize": 20,
+                "fontWeight": "bold",
+                "color": "#E65100"
+              },
+              "modifier": {
+                "paddingBottom": 12
+              }
+            },
+            {
+              "type": "Text",
+              "description": "1-2 meals per day",
+              "textStyle": {
+                "fontSize": 16,
+                "fontWeight": "bold"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Text",
+              "description": "Textures: Pureed, mashed, soft",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "Focus: Iron-rich foods, vegetables, fruit, allergen introduction",
+              "textStyle": {
+                "fontSize": 14,
+                "color": "#666666"
+              },
+              "modifier": {
+                "paddingBottom": 16
+              }
+            },
+            {
+              "type": "Text",
+              "title": "Meal Suggestions:",
+              "textStyle": {
+                "fontSize": 16,
+                "fontWeight": "bold"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Column",
+              "children": [
+                {
+                  "type": "Text",
+                  "description": "• Iron-fortified oat cereal thinned with breastmilk/formula",
+                  "textStyle": {
+                    "fontSize": 13
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "• Smooth peanut butter mixed into cereal or yogurt (tiny amount)",
+                  "textStyle": {
+                    "fontSize": 13
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "• Mashed avocado or banana",
+                  "textStyle": {
+                    "fontSize": 13
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "• Pureed beef/chicken/turkey or lentils with a little oil",
+                  "textStyle": {
+                    "fontSize": 13
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "• Pureed sweet potato, squash, or carrots",
+                  "textStyle": {
+                    "fontSize": 13
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "• Soft-scrambled egg (well-cooked yolk and white)",
+                  "textStyle": {
+                    "fontSize": 13
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#E3F2FD",
+        "elevation": 2,
+        "modifier": {
+          "paddingBottom": 16,
+          "fillMaxWidth": true
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "💧 Hydration",
+              "textStyle": {
+                "fontSize": 20,
+                "fontWeight": "bold",
+                "color": "#1565C0"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Text",
+              "description": "Water: Up to 4 oz per day",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "Offer small sips with meals",
+              "textStyle": {
+                "fontSize": 12,
+                "color": "#666666"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#FFEBEE",
+        "elevation": 2,
+        "modifier": {
+          "paddingBottom": 16,
+          "fillMaxWidth": true
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "⚠️ Important Cautions",
+              "textStyle": {
+                "fontSize": 20,
+                "fontWeight": "bold",
+                "color": "#C62828"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• No honey (until 12 months)",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Watch for choking hazards",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Milk remains the primary nutrition source",
+              "textStyle": {
+                "fontSize": 14
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#F3E5F5",
+        "elevation": 2,
+        "modifier": {
+          "fillMaxWidth": true
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "💡 Helpful Tips",
+              "textStyle": {
+                "fontSize": 20,
+                "fontWeight": "bold",
+                "color": "#6A1B9A"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Feed responsively to hunger/fullness cues",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Offer solids after milk feed or midway between",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Keep total milk intake at 24-32 oz per day",
+              "textStyle": {
+                "fontSize": 14
+              },
+              "modifier": {
+                "paddingBottom": 4
+              }
+            },
+            {
+              "type": "Text",
+              "description": "• Individual needs vary—consult your pediatrician",
+              "textStyle": {
+                "fontSize": 14
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -16,6 +16,7 @@ A lightweight Android Compose-based server-side rendering library that converts 
 - **Text** - Text display with custom styling
 - **Button** - Interactive button with action handling
 - **Image** - Async image loading with size control
+- **Table** - Data table with headers, flexible columns, cell styling, and click actions
 
 ## New Features
 
@@ -92,6 +93,60 @@ Load images from URLs with automatic sizing:
 - Set both for fixed size
 - Uses Coil for async loading and caching
 
+### Table Component
+
+Display structured data with customizable headers, columns, and cell styling:
+
+```json
+{
+  "type": "Table",
+  "showBorders": true,
+  "headerBackgroundColor": "#6200EE",
+  "rowAction": "row_clicked",
+  "columns": [
+    {
+      "header": "Name",
+      "weight": 2.0,
+      "horizontalAlignment": "start",
+      "headerStyle": {
+        "color": "#FFFFFF",
+        "fontSize": 16
+      }
+    },
+    {
+      "header": "Status",
+      "weight": 1.0,
+      "horizontalAlignment": "center"
+    }
+  ],
+  "tableData": [
+    [
+      {
+        "text": "Alice Johnson"
+      },
+      {
+        "text": "Active",
+        "backgroundColor": "#4CAF50",
+        "textStyle": {
+          "color": "#FFFFFF",
+          "fontWeight": "bold"
+        },
+        "action": "view_alice"
+      }
+    ]
+  ]
+}
+```
+
+**Features:**
+- **Flexible columns** - Use `weight` for proportional widths or `width` (dp) for fixed sizes
+- **Header styling** - Custom background colors and text styles for headers
+- **Cell styling** - Override styles per cell with `backgroundColor` and `textStyle`
+- **Click actions** - `rowAction` for entire row clicks, or `action` per cell
+- **Borders** - Optional borders with `showBorders: true`
+- **Alignment** - Per-column alignment: `"start"`, `"center"`, `"end"`
+- **Performance** - Uses LazyColumn for efficient rendering of large datasets
+
 ## JSON Schema
 
 ### NodeModel
@@ -114,7 +169,38 @@ Load images from URLs with automatic sizing:
   "topBar": { },                 // NodeModel for Scaffold
   "floatingActionButton": { },   // NodeModel for Scaffold
   "content": { },                // NodeModel for Scaffold
-  "children": []                 // Array of NodeModels
+  "children": [],                // Array of NodeModels
+  // Table-specific properties
+  "columns": [],                 // Array of TableColumnModel (for Table)
+  "tableData": [],               // Array of arrays of TableCellModel (for Table)
+  "showBorders": true,           // Show table borders (for Table)
+  "headerBackgroundColor": "#RRGGBB", // Header background color (for Table)
+  "rowAction": "String"          // Action when row is clicked (for Table)
+}
+```
+
+### TableColumnModel
+
+```json
+{
+  "header": "String",            // Column header text (required)
+  "weight": 1.0,                 // Column width weight (flexible)
+  "width": 100,                  // Fixed column width in dp (overrides weight)
+  "horizontalAlignment": "start", // "start", "center", "end"
+  "textStyle": { },              // TextStyleModel for column cells
+  "headerStyle": { }             // TextStyleModel for header
+}
+```
+
+### TableCellModel
+
+```json
+{
+  "text": "String",              // Cell text content (required)
+  "textStyle": { },              // TextStyleModel (overrides column style)
+  "backgroundColor": "#RRGGBB",  // Cell background color (hex)
+  "action": "String",            // Click action for this cell
+  "modifier": { }                // ModifierModel for additional styling
 }
 ```
 
@@ -188,11 +274,13 @@ Sample JSON files demonstrating various features are available in:
 - `row_alignment.json` - Row vertical alignment
 - `box_alignment.json` - Box content alignment
 - `complete_example.json` - Comprehensive feature showcase
+- `simple_table.json` - Basic table with employee directory and status indicators
 
 ### Complex Examples
 - `complex_dashboard.json` - Full dashboard with stats, activity feed, team updates, and multiple interactive components
 - `product_catalog.json` - E-commerce product listing with categories, featured products, pricing, and cart actions
 - `image_gallery.json` - Image loading examples with various sizes, grid layouts, and profile cards
+- `advanced_table.json` - Sales dashboard with styled cells, click actions, and color-coded revenue data
 
 ## LLM-Assisted UI Generation
 

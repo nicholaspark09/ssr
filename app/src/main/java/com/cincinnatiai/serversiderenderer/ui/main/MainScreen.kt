@@ -83,7 +83,7 @@ fun MainScreen() {
             startDestination = "home",
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable("home") { HomeScreen() }
+            composable("home") { ProfileScreen() }
             composable("charts") { ChartsScreen() }
             composable("profile") { ProfileScreen() }
             composable("dashboard") { DashboardScreen() }

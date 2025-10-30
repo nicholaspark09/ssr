@@ -1,0 +1,779 @@
+{
+  "type": "Scaffold",
+  "topBar": {
+    "type": "TopAppBar",
+    "title": "Chef's Assistant"
+  },
+  "content": {
+    "type": "LazyColumn",
+    "modifier": {
+      "fillMaxSize": true,
+      "padding": 16
+    },
+    "children": [
+      {
+        "type": "Text",
+        "title": "Select Your Baby's Age",
+        "textStyle": {
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "color": "#FF6B6B"
+        },
+        "modifier": {
+          "paddingBottom": 8
+        }
+      },
+      {
+        "type": "Text",
+        "description": "Tap any month to see feeding guidelines and meal suggestions",
+        "textStyle": {
+          "fontSize": 14,
+          "color": "#666666"
+        },
+        "modifier": {
+          "paddingBottom": 24
+        }
+      },
+      {
+        "type": "Text",
+        "title": "Newborn (0-3 months)",
+        "textStyle": {
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "color": "#333333"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Card",
+            "backgroundColor": "#E8F5E9",
+            "elevation": 2,
+            "action": "month_0",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "0 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#2E7D32"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Milk only",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E8F5E9",
+            "elevation": 2,
+            "action": "month_1",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "1 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#2E7D32"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Milk only",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E8F5E9",
+            "elevation": 2,
+            "action": "month_2",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "2 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#2E7D32"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Milk only",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E8F5E9",
+            "elevation": 2,
+            "action": "month_3",
+            "modifier": {
+              "weight": 1
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "3 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#2E7D32"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Milk only",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Pre-Solids (4-5 months)",
+        "textStyle": {
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "color": "#333333"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Card",
+            "backgroundColor": "#FFF9C4",
+            "elevation": 2,
+            "action": "month_4",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "4 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#F57F17"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Preparing",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#FFF9C4",
+            "elevation": 2,
+            "action": "month_5",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "5 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#F57F17"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍼 Approaching",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Spacer",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            }
+          },
+          {
+            "type": "Spacer",
+            "modifier": {
+              "weight": 1
+            }
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Starting Solids (6-11 months)",
+        "textStyle": {
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "color": "#333333"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "paddingBottom": 8
+        },
+        "children": [
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_6",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "6 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🥄 Start!",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_7",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "7 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🥄 2-3 meals",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_8",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "8 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🥄 Finger foods",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_9",
+            "modifier": {
+              "weight": 1
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "9 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ 3 meals",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "paddingBottom": 16
+        },
+        "children": [
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_10",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "10 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ + snacks",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#FFE0B2",
+            "elevation": 2,
+            "action": "month_11",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "11 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#E65100"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ Family foods",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Spacer",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            }
+          },
+          {
+            "type": "Spacer",
+            "modifier": {
+              "weight": 1
+            }
+          }
+        ]
+      },
+      {
+        "type": "Text",
+        "title": "Toddler (12+ months)",
+        "textStyle": {
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "color": "#333333"
+        },
+        "modifier": {
+          "paddingBottom": 12
+        }
+      },
+      {
+        "type": "Row",
+        "modifier": {
+          "paddingBottom": 8
+        },
+        "children": [
+          {
+            "type": "Card",
+            "backgroundColor": "#E1BEE7",
+            "elevation": 2,
+            "action": "month_12",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "12 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#6A1B9A"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🥛 Whole milk",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E1BEE7",
+            "elevation": 2,
+            "action": "month_15",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "15 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#6A1B9A"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ Independent",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E1BEE7",
+            "elevation": 2,
+            "action": "month_18",
+            "modifier": {
+              "weight": 1,
+              "marginEnd": 8
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "18 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#6A1B9A"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ Variety",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "Card",
+            "backgroundColor": "#E1BEE7",
+            "elevation": 2,
+            "action": "month_24",
+            "modifier": {
+              "weight": 1
+            },
+            "content": {
+              "type": "Column",
+              "modifier": {
+                "padding": 16
+              },
+              "children": [
+                {
+                  "type": "Text",
+                  "title": "24 mo",
+                  "textStyle": {
+                    "fontSize": 24,
+                    "fontWeight": "bold",
+                    "color": "#6A1B9A"
+                  },
+                  "modifier": {
+                    "paddingBottom": 4
+                  }
+                },
+                {
+                  "type": "Text",
+                  "description": "🍽️ All foods",
+                  "textStyle": {
+                    "fontSize": 12
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "type": "Card",
+        "backgroundColor": "#E3F2FD",
+        "elevation": 1,
+        "modifier": {
+          "fillMaxWidth": true,
+          "paddingTop": 16
+        },
+        "content": {
+          "type": "Column",
+          "modifier": {
+            "padding": 16
+          },
+          "children": [
+            {
+              "type": "Text",
+              "title": "💡 Remember",
+              "textStyle": {
+                "fontSize": 16,
+                "fontWeight": "bold",
+                "color": "#1565C0"
+              },
+              "modifier": {
+                "paddingBottom": 8
+              }
+            },
+            {
+              "type": "Text",
+              "description": "Every baby is unique! These are general guidelines. Always feed responsively and consult your pediatrician for personalized advice.",
+              "textStyle": {
+                "fontSize": 13,
+                "color": "#424242"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
