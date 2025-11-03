@@ -59,6 +59,32 @@ public class SSR {
         return new NodeBuilder("Divider");
     }
 
+    public static NodeBuilder videoItem(String title, String description, String imageUrl, String action) {
+        return new NodeBuilder("VideoItem")
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .action(action)
+                .elevation(4f)
+                .roundedCorners(12f);
+    }
+
+    public static NodeBuilder videoItem(String title, String description, String imageUrl, String action,
+                                       float elevation, float roundedCorners, String backgroundColor) {
+        return new NodeBuilder("VideoItem")
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .action(action)
+                .elevation(elevation)
+                .roundedCorners(roundedCorners)
+                .backgroundColor(backgroundColor);
+    }
+
+    public static NodeBuilder horizontalPager() {
+        return new NodeBuilder("HorizontalPager");
+    }
+
     // Helper methods for common components
     public static TableColumnBuilder column(String header) {
         return new TableColumnBuilder(header);
