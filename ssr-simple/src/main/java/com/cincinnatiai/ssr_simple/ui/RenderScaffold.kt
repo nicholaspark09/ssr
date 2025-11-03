@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -25,6 +26,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -210,13 +212,11 @@ fun RenderVideoItem(node: NodeModel, onAction: (String) -> Unit = {}) {
 
     val elevation = node.elevation?.dp ?: 4.dp
 
-    val modifier = buildModifier(node.modifier).apply {
-        node.action?.let { it ->
-            clickable {
-                onAction(it)
-            }
-        }
+    var modifier = buildModifier(node.modifier)
+    node.action?.let { action ->
+        modifier = modifier.clickable { onAction(action) }
     }
+
     var shape = CardDefaults.shape
     node.roundedCorners?.let { it ->
         shape = RoundedCornerShape(it)
@@ -608,12 +608,55 @@ private fun RowScope.TableDataCell(
 fun RenderHorizontalPager(node: NodeModel, onAction: (String) -> Unit) {
     val children = node.children ?: emptyList()
     val pagerState = rememberPagerState(pageCount = { children.size })
+    val pagerHeight = node.modifier?.height
 
-    HorizontalPager(
-        state = pagerState,
-        modifier = buildModifier(node.modifier)
-    ) { page ->
-        RenderNode(children[page], onAction)
+    Column(
+        modifier = buildModifier(node.modifier),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { page ->
+            // Apply fixed height to each page if specified
+            val pageModifier = if (pagerHeight != null) {
+                Modifier
+                    .fillMaxWidth()
+                    .height(pagerHeight.dp)
+            } else {
+                Modifier.fillMaxWidth()
+            }
+
+            Box(modifier = pageModifier) {
+                RenderNode(children[page], onAction)
+            }
+        }
+
+        // Page indicator
+        if (children.size > 1) {
+            Row(
+                modifier = Modifier
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(children.size) { index ->
+                    val isSelected = pagerState.currentPage == index
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp)
+                            .size(if (isSelected) 8.dp else 6.dp)
+                            .background(
+                                color = if (isSelected)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                shape = CircleShape
+                            )
+                    )
+                }
+            }
+        }
     }
 }
 

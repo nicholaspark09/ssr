@@ -1,12 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)",
-      "Bash(./gradlew :ssr-java:build:*)",
-      "Bash(./gradlew:*)",
-      "Bash(javac:*)",
-      "Bash(java:*)",
-      "Read(//Users/nicholaspark/.gradle/caches/modules-2/files-2.1/com.google.code.gson/**)"
+      "Bash(go test:*)",
+      "Bash(./gradlew :ssr-simple:build:*)"
     ],
     "deny": [],
     "ask": []

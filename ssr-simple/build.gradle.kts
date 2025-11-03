@@ -63,7 +63,7 @@ dependencies {
 
 val major = 0
 val minor = 0
-val patch = 13
+val patch = 15
 
 afterEvaluate {
     publishing {

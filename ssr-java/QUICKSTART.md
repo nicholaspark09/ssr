@@ -57,8 +57,7 @@ public class MyFirstUI {
 
         // Convert to JSON
         String json = SSR.toJson(ui);
-
-        // Print or send to your Android app
+        
         System.out.println(json);
     }
 }

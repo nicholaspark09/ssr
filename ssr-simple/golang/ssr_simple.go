@@ -254,6 +254,44 @@ func Image(imageURL string, width, height float64, contentDescription string, mo
 	return node
 }
 
+// VideoItem creates a video item card with thumbnail, title, and description
+func VideoItem(title, description, imageURL, action string, elevation, roundedCorners float64, backgroundColor string, modifier *ModifierModel) *NodeModel {
+	return &NodeModel{
+		Type:            "VideoItem",
+		Title:           String(title),
+		Description:     String(description),
+		ImageURL:        String(imageURL),
+		Action:          String(action),
+		Elevation:       Float64(elevation),
+		RoundedCorners:  Float64(roundedCorners),
+		BackgroundColor: String(backgroundColor),
+		Modifier:        modifier,
+	}
+}
+
+// VideoItemSimple creates a video item with default styling
+func VideoItemSimple(title, description, imageURL, action string, modifier *ModifierModel) *NodeModel {
+	return &NodeModel{
+		Type:           "VideoItem",
+		Title:          String(title),
+		Description:    String(description),
+		ImageURL:       String(imageURL),
+		Action:         String(action),
+		Elevation:      Float64(4),
+		RoundedCorners: Float64(12),
+		Modifier:       modifier,
+	}
+}
+
+// HorizontalPager creates a horizontal pager component for swipeable content
+func HorizontalPager(children []NodeModel, modifier *ModifierModel) *NodeModel {
+	return &NodeModel{
+		Type:     "HorizontalPager",
+		Children: children,
+		Modifier: modifier,
+	}
+}
+
 // Table creates a data table
 func Table(
 	columns []TableColumnModel,

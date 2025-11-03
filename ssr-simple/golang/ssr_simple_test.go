@@ -318,3 +318,174 @@ func BenchmarkComplexStructure(b *testing.B) {
 		)
 	}
 }
+
+func TestVideoItem(t *testing.T) {
+	videoItem := VideoItem(
+		"Test Video",
+		"Test Description",
+		"https://example.com/image.jpg",
+		"play:video_001",
+		4.0,
+		12.0,
+		"#E3F2FD",
+		Modifier().WithFillMaxWidth().WithPadding(16),
+	)
+
+	jsonStr, err := videoItem.ToJSON()
+	if err != nil {
+		t.Fatalf("Failed to convert to JSON: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		t.Fatalf("Invalid JSON generated: %v", err)
+	}
+
+	if result["type"] != "VideoItem" {
+		t.Errorf("Expected type 'VideoItem', got '%v'", result["type"])
+	}
+
+	if result["title"] != "Test Video" {
+		t.Errorf("Expected title 'Test Video', got '%v'", result["title"])
+	}
+
+	if result["imageUrl"] != "https://example.com/image.jpg" {
+		t.Errorf("Expected imageUrl 'https://example.com/image.jpg', got '%v'", result["imageUrl"])
+	}
+
+	if result["action"] != "play:video_001" {
+		t.Errorf("Expected action 'play:video_001', got '%v'", result["action"])
+	}
+
+	if result["elevation"] != 4.0 {
+		t.Errorf("Expected elevation 4.0, got '%v'", result["elevation"])
+	}
+
+	if result["roundedCorners"] != 12.0 {
+		t.Errorf("Expected roundedCorners 12.0, got '%v'", result["roundedCorners"])
+	}
+}
+
+func TestVideoItemSimple(t *testing.T) {
+	videoItem := VideoItemSimple(
+		"Test Video",
+		"Test Description",
+		"https://example.com/image.jpg",
+		"play:video_001",
+		Modifier().WithFillMaxWidth(),
+	)
+
+	jsonStr, err := videoItem.ToJSON()
+	if err != nil {
+		t.Fatalf("Failed to convert to JSON: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		t.Fatalf("Invalid JSON generated: %v", err)
+	}
+
+	if result["type"] != "VideoItem" {
+		t.Errorf("Expected type 'VideoItem', got '%v'", result["type"])
+	}
+
+	// Check default values
+	if result["elevation"] != 4.0 {
+		t.Errorf("Expected default elevation 4.0, got '%v'", result["elevation"])
+	}
+
+	if result["roundedCorners"] != 12.0 {
+		t.Errorf("Expected default roundedCorners 12.0, got '%v'", result["roundedCorners"])
+	}
+}
+
+func TestHorizontalPager(t *testing.T) {
+	pager := HorizontalPager(
+		[]NodeModel{
+			*VideoItemSimple("Video 1", "Description 1", "url1", "action1", nil),
+			*VideoItemSimple("Video 2", "Description 2", "url2", "action2", nil),
+			*VideoItemSimple("Video 3", "Description 3", "url3", "action3", nil),
+		},
+		Modifier().WithFillMaxWidth().WithHeight(300),
+	)
+
+	jsonStr, err := pager.ToJSON()
+	if err != nil {
+		t.Fatalf("Failed to convert to JSON: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		t.Fatalf("Invalid JSON generated: %v", err)
+	}
+
+	if result["type"] != "HorizontalPager" {
+		t.Errorf("Expected type 'HorizontalPager', got '%v'", result["type"])
+	}
+
+	children, ok := result["children"].([]interface{})
+	if !ok {
+		t.Error("Expected children to be an array")
+	}
+
+	if len(children) != 3 {
+		t.Errorf("Expected 3 children, got %d", len(children))
+	}
+
+	// Check first child is a VideoItem
+	firstChild, ok := children[0].(map[string]interface{})
+	if !ok {
+		t.Error("Expected first child to be an object")
+	}
+
+	if firstChild["type"] != "VideoItem" {
+		t.Errorf("Expected first child type 'VideoItem', got '%v'", firstChild["type"])
+	}
+}
+
+func TestHorizontalPagerWithMixedContent(t *testing.T) {
+	pager := HorizontalPager(
+		[]NodeModel{
+			*VideoItemSimple("Video 1", "Description 1", "url1", "action1", nil),
+			*Card("Card Title", "Card Description", 4.0, nil),
+			*Column(
+				[]NodeModel{
+					*Text("Text in Column", nil, nil),
+				},
+				nil,
+			),
+		},
+		Modifier().WithFillMaxSize(),
+	)
+
+	jsonStr, err := pager.ToJSONIndent()
+	if err != nil {
+		t.Fatalf("Failed to convert to JSON: %v", err)
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &result); err != nil {
+		t.Fatalf("Invalid JSON generated: %v", err)
+	}
+
+	children, ok := result["children"].([]interface{})
+	if !ok || len(children) != 3 {
+		t.Errorf("Expected 3 children in HorizontalPager, got %d", len(children))
+	}
+
+	// Verify different types
+	child1 := children[0].(map[string]interface{})
+	if child1["type"] != "VideoItem" {
+		t.Error("First child should be VideoItem")
+	}
+
+	child2 := children[1].(map[string]interface{})
+	if child2["type"] != "Card" {
+		t.Error("Second child should be Card")
+	}
+
+	child3 := children[2].(map[string]interface{})
+	if child3["type"] != "Column" {
+		t.Error("Third child should be Column")
+	}
+}
