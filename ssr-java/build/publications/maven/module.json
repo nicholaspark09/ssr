@@ -3,7 +3,7 @@
   "component": {
     "group": "com.cincinnatiai",
     "module": "ssr-java",
-    "version": "0.0.1",
+    "version": "0.0.11",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -25,13 +25,13 @@
       },
       "files": [
         {
-          "name": "ssr-java-0.0.1.jar",
-          "url": "ssr-java-0.0.1.jar",
-          "size": 21317,
-          "sha512": "51ade628b10c0b75727dfa78dd50f10d9d7b50aab090f939754c6c9d9b975e8d75b03b6ce141c053f2ea9b4cae23256c6a5f8259e4ac62ea9cc060bc17b44e89",
-          "sha256": "b6658b697ad072b91339fcd9688f27cf7072b28cd1fa883d80f677036bc5e7c2",
-          "sha1": "10250e3a1c295f99463fde0d8bc328830d730698",
-          "md5": "0b08a0501f64c31103db470e77692d8b"
+          "name": "ssr-java-0.0.11.jar",
+          "url": "ssr-java-0.0.11.jar",
+          "size": 23854,
+          "sha512": "7d149f0b0b5474e30b3fecb3cb58b2b8f1b7d8be522bcc4c6c9bfd0397832576e3e31ea215fc90cb6c3efe576032aceb6fb7f921e8d823ba4dec5362aa8102d1",
+          "sha256": "6dfbca2d3dba22343964e933b3d8f4fa6792a854bbc355c48ad077e08fc99a69",
+          "sha1": "459554ee2612088cc97ca1673cd125d60d429a27",
+          "md5": "d7fac7c6d3b7cf84e9e8f637dd1e4c02"
         }
       ]
     },
@@ -55,13 +55,13 @@
       ],
       "files": [
         {
-          "name": "ssr-java-0.0.1.jar",
-          "url": "ssr-java-0.0.1.jar",
-          "size": 21317,
-          "sha512": "51ade628b10c0b75727dfa78dd50f10d9d7b50aab090f939754c6c9d9b975e8d75b03b6ce141c053f2ea9b4cae23256c6a5f8259e4ac62ea9cc060bc17b44e89",
-          "sha256": "b6658b697ad072b91339fcd9688f27cf7072b28cd1fa883d80f677036bc5e7c2",
-          "sha1": "10250e3a1c295f99463fde0d8bc328830d730698",
-          "md5": "0b08a0501f64c31103db470e77692d8b"
+          "name": "ssr-java-0.0.11.jar",
+          "url": "ssr-java-0.0.11.jar",
+          "size": 23854,
+          "sha512": "7d149f0b0b5474e30b3fecb3cb58b2b8f1b7d8be522bcc4c6c9bfd0397832576e3e31ea215fc90cb6c3efe576032aceb6fb7f921e8d823ba4dec5362aa8102d1",
+          "sha256": "6dfbca2d3dba22343964e933b3d8f4fa6792a854bbc355c48ad077e08fc99a69",
+          "sha1": "459554ee2612088cc97ca1673cd125d60d429a27",
+          "md5": "d7fac7c6d3b7cf84e9e8f637dd1e4c02"
         }
       ]
     },
@@ -75,13 +75,13 @@
       },
       "files": [
         {
-          "name": "ssr-java-0.0.1-sources.jar",
-          "url": "ssr-java-0.0.1-sources.jar",
-          "size": 12017,
-          "sha512": "1254e1f86ff1674f891c908212389e6ffacd34aa330d6328e07067a6a1b4a440cbdf609a887d02c1c00f4cdeaa79544851af699d1458a6e8aeb5ee46f6accf84",
-          "sha256": "8d9a7b41f61cdf23fc21e2255c18160dcf46d0e1ef96adc43082112a52df957b",
-          "sha1": "204dc3e494e5bc29c3defd6659034c5215f10386",
-          "md5": "28a19ccf0ca6a326a6edff73c1ffe518"
+          "name": "ssr-java-0.0.11-sources.jar",
+          "url": "ssr-java-0.0.11-sources.jar",
+          "size": 13496,
+          "sha512": "d66c13a349c27c460a3fd1a624002f3decde17c87b3522a374ec4ba07d46097ca0ffee76697333607eeead37b715cc7d4f5960838381558665554a73968ab467",
+          "sha256": "c187bdfc12539d560ee734b10b90ab319cb66dc62db18b8abbc626cd1ac281f8",
+          "sha1": "f5c2092c94550248f0fa7afee8b9e210f7380b09",
+          "md5": "fdb80f75df2a65b5cb57945d3f067340"
         }
       ]
     },
@@ -95,13 +95,13 @@
       },
       "files": [
         {
-          "name": "ssr-java-0.0.1-javadoc.jar",
-          "url": "ssr-java-0.0.1-javadoc.jar",
-          "size": 4210663,
-          "sha512": "ac80919cb89afe9ce86b0b349416daaffa9b8648ba5af83fd924a1ef37483378d9dec9082a70db6dd84d3b504a74a0115ed2222cc6fccc3edef600d62a3de0ba",
-          "sha256": "b64c43d9de0261e92368b3181a1f4fe2acf949a61012be30ac152ca5b3587f43",
-          "sha1": "273922d7726a086d32b06ddc08a629aa3f95beef",
-          "md5": "3da7dd6d359d2f4fb17e65e2972d3146"
+          "name": "ssr-java-0.0.11-javadoc.jar",
+          "url": "ssr-java-0.0.11-javadoc.jar",
+          "size": 4214170,
+          "sha512": "edd9da90567e4a4eeea2a5682e4d8551c7f0564afc48ad7006d00fa12501db848127bfa201a7d3d4cae9b6ebbfd9440f9f7ed033573b773095afda153030480d",
+          "sha256": "204102add09e51ee3a299234823739b8a15a94d0d61c5d9e7f30c5497a1f9e10",
+          "sha1": "8e96f86fc2cfa2245c59aa9db1d1f0672211e21f",
+          "md5": "7888c6153f9dde15318a40a63d378129"
         }
       ]
     }

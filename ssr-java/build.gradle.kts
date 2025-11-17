@@ -16,7 +16,7 @@ dependencies {
 
 val major = 0
 val minor = 0
-val patch = 1
+val patch = 11
 
 publishing {
     publications {

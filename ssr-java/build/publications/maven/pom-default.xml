@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cincinnatiai</groupId>
   <artifactId>ssr-java</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.11</version>
   <name>SSR Java Library</name>
   <description>Server-side rendering library for building JSON UI definitions in Java</description>
   <url>https://github.com/nicholaspark09/ssr</url>
